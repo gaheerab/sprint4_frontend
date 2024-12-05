@@ -1,0 +1,109 @@
+---
+layout: base
+title: User Profile Setup
+search_exclude: true
+permalink: /music/userprofile_setup.html/
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Setup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #1c1c1c;
+            color: #eaeaea;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #282828;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #f0a500;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            font-size: 1em;
+            color: #f0a500;
+        }
+        input, textarea {
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #333;
+            color: #eaeaea;
+        }
+        input[type="file"] {
+            padding: 5px;
+        }
+        button {
+            background: linear-gradient(145deg, #f0a500, #d18b00);
+            border: none;
+            padding: 12px;
+            font-size: 1em;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        button:hover {
+            background-color: #ffc107;
+            transform: scale(1.05);
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9em;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Setup Your Profile</h1>
+        <form id="profileForm" action="/submit_profile" method="POST" enctype="multipart/form-data">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="bio">Bio:</label>
+            <textarea id="bio" name="bio" rows="4" required></textarea>
+
+            <label for="artists">Top 5 Favorite Artists:</label>
+            <input type="text" id="artists" name="artists" placeholder="Comma-separated list" required>
+
+            <label for="profilePicture">Profile Picture:</label>
+            <input type="file" id="profilePicture" name="profile_picture" accept="image/*">
+
+            <div class="checkbox-label">
+                <input type="checkbox" id="noPicture" name="no_picture" onchange="toggleProfilePicture()">
+                <label for="noPicture">I don’t want to use a profile picture</label>
+            </div>
+
+            <button type="submit">Create Profile</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleProfilePicture() {
+            const profilePictureInput = document.getElementById('profilePicture');
+            const noPictureCheckbox = document.getElementById('noPicture');
+            profilePictureInput.disabled = noPictureCheckbox.checked;
+        }
+    </script>
+  <script src="/scripts/musicprofile.js"></script>  
+</body>
+</html>

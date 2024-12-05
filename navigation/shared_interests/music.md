@@ -118,6 +118,12 @@ permalink: /music/
    </div>
    <!-- Music Page Content -->
    <div class="container">
+      <!-- User Profile Setup -->
+       <div class="section" id="user_profile">
+           <h2>User Profile</h2> <!-- Title changed here -->
+           <p>Create your own personalized public profile for your matches to view!</p>
+           <button onclick="window.location.href='userprofile_setup.html'">Update Your Public Profile</button> <!-- Button link updated -->
+       </div>
        <!-- Music Chatroom Section -->
        <div class="section" id="chat_room">
            <h2>Music Chatroom</h2> <!-- Title changed here -->
@@ -148,12 +154,12 @@ permalink: /music/
            <p>Read and share reviews of albums, songs, and artists.</p>
            <button onclick="window.location.href='reviews.html'">Explore Reviews</button>
        </div>
-       <!-- Profile Building Section -->
-       <div class="section" id="Profile Building">
+       <!-- Music Profile Section -->
+       <div class="section" id="Music Profile Building">
            <h2>Build Your Music Profile!</h2>
-           <p>Create your custom user profile for others to view!</p>
-           <button onclick="window.location.href='profile_building.html'">Discover Artists</button>
-       </div>
+           <p>Create your custom music  profile for others to view!</p>
+           <button onclick="window.location.href='profile_building.html'">Create Your Music Profile</button>
+        </div>
         <!-- Profile Matching Section -->
        <div class="section" id="Profile Matching">
            <h2>Match With Other Users!</h2>
