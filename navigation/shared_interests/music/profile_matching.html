@@ -1,0 +1,183 @@
+---
+layout: base 
+title: Profile Matching
+search_exclude: true
+permalink: /music/profile_matching.html/
+---
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Match</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            position: relative;
+            width: 500px;
+            height: 700px;
+            overflow: hidden;
+        }
+
+        .card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            height: 500px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            opacity: 1;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .card-body {
+            margin-bottom: 20px;
+        }
+
+        .card-body p {
+            margin: 5px 0;
+            color: #888;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .button {
+            font-size: 2rem;
+            padding: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .button:hover {
+            transform: scale(1.2);
+        }
+
+        .check {
+            color: green;
+        }
+
+        .x {
+            color: red;
+        }
+
+        .card-move-left {
+            transform: translateX(-500px);
+            opacity: 0;
+        }
+
+        .card-move-right {
+            transform: translateX(500px);
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="card" class="card">
+            <div class="profile-img"></div>
+            <div class="card-header">User 1</div>
+            <div class="card-body">
+                <p><strong>Music Genre:</strong> Placeholder</p>
+                <p><strong>Favorite Artist:</strong> Placeholder</p>
+                <p><strong>Top Song:</strong> Placeholder</p>
+                <p><strong>Listening Time:</strong> Placeholder</p>
+            </div>
+            <div class="buttons">
+                <span id="reject" class="button x">❌</span>
+                <span id="approve" class="button check">✅</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const approveButton = document.getElementById('approve');
+        const rejectButton = document.getElementById('reject');
+        const container = document.querySelector('.container');
+
+        const createNewCard = () => {
+            const newCard = document.createElement('div');
+            newCard.classList.add('card');
+            newCard.innerHTML = `
+                <div class="profile-img"></div>
+                <div class="card-header">User Placeholder</div>
+                <div class="card-body">
+                    <p><strong>Music Genre:</strong> Placeholder</p>
+                    <p><strong>Favorite Artist:</strong> Placeholder</p>
+                    <p><strong>Top Song:</strong> Placeholder</p>
+                    <p><strong>Listening Time:</strong> Placeholder</p>
+                </div>
+                <div class="buttons">
+                    <span class="button x">❌</span>
+                    <span class="button check">✅</span>
+                </div>
+            `;
+            container.appendChild(newCard);
+
+            // Add functionality to new buttons
+            const newApproveButton = newCard.querySelector('.check');
+            const newRejectButton = newCard.querySelector('.x');
+
+            newApproveButton.addEventListener('click', () => {
+                moveCard(newCard, 'right');
+            });
+
+            newRejectButton.addEventListener('click', () => {
+                moveCard(newCard, 'left');
+            });
+        }
+
+        const moveCard = (cardElement, direction) => {
+            cardElement.classList.add(`card-move-${direction}`);
+            setTimeout(() => {
+                cardElement.classList.remove(`card-move-${direction}`);
+                createNewCard();
+                container.removeChild(cardElement);
+            }, 300);
+        }
+
+        approveButton.addEventListener('click', () => {
+            moveCard(card, 'right');
+        });
+
+        rejectButton.addEventListener('click', () => {
+            moveCard(card, 'left');
+        });
+    </script>
+</body>
+
+</html>
