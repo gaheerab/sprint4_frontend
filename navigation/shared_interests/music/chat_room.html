@@ -1,0 +1,321 @@
+---
+layout: base 
+title: Chat Room
+search_exclude: true
+permalink: /music/chat_room.html/
+---
+
+<div class="chat-container">
+    <div class="chat-header">
+        <h1>Chat Room</h1>
+        <select class="chat-select" id="genre-select">
+            <option value="pop">Pop</option>
+            <option value="hip-hop">Hip-Hop</option>
+            <option value="r&b">R&B</option>
+            <option value="jazz">Jazz</option>
+            <option value="classical">Classical</option>
+            <option value="country">Country</option>
+        </select>
+    </div>
+    <div class="messages" id="messages">
+        <!-- Messages will display here -->
+    </div>
+    <div class="message-input">
+        <input type="text" id="message-input" placeholder="Type your message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<style>
+    /* Global Styling */
+    .chat-container {
+        background-color: #2d2f31;
+        border-radius: 15px;
+        padding: 30px;
+        width: 80%;
+        max-width: 900px;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .chat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #5f6368;
+    }
+
+    .chat-header h1 {
+        font-size: 2em;
+        color: #fbbc04;
+        margin: 0;
+    }
+
+    .chat-select {
+        padding: 10px 16px;
+        font-size: 1em;
+        color: #202124;
+        background-color: #fbbc04;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .chat-select:hover {
+        background-color: #ffcd3f;
+    }
+
+    /* Chat Messages Display */
+    .messages {
+        background-color: #1e1f21;
+        height: 450px;
+        padding: 20px;
+        overflow-y: auto;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #5f6368;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .message {
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 1em;
+        max-width: 70%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .user-message {
+        align-self: flex-end;
+        background-color: #4285f4;
+        color: #e8eaed;
+    }
+
+    .other-message {
+        align-self: flex-start;
+        background-color: #3c4043;
+        color: #e8eaed;
+    }
+
+    .reply-box {
+        background-color: #35393b;  /* Slightly darker shade for replies */
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 0.9em;
+        color: #e8eaed;
+        margin-bottom: 10px;
+    }
+
+    /* Heart Button */
+    .heart {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        cursor: pointer;
+        font-size: 1.2em;
+        color: #fbbc04;
+    }
+
+    .heart.show {
+        font-size: 1em;
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+    }
+
+    /* Reply Button */
+    .reply-button {
+        background-color: #34a853;
+        color: #e8eaed;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 0.9em;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .reply-button:hover {
+        background-color: #42bd60;
+    }
+
+    /* Message Input Section */
+    .message-input {
+        display: flex;
+        gap: 10px;
+    }
+
+    .message-input input {
+        flex-grow: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        background-color: #303134;
+        color: #e8eaed;
+        font-size: 1em;
+    }
+
+    .message-input button {
+        padding: 12px 18px;
+        border: none;
+        border-radius: 8px;
+        background-color: #34a853;
+        color: #e8eaed;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+    }
+
+    .message-input button:hover {
+        background-color: #42bd60;
+    }
+</style>
+
+<script>
+    const messagesDiv = document.getElementById('messages');
+    const messageInput = document.getElementById('message-input');
+    const genreSelect = document.getElementById('genre-select');
+    const profanityList = ['ex1', 'ex2', 'ex3'];  // Rowan add profanity words to censor
+
+    // Load messages from localStorage when the page loads
+    const messages = JSON.parse(localStorage.getItem('chatMessages')) || {
+        "pop": [],
+        "hip-hop": [],
+        "r&b": [],
+        "jazz": [],
+        "classical": [],
+        "country": []
+    };
+
+    // Function to send a message
+    function sendMessage() {
+        let messageText = messageInput.value.trim();
+        if (messageText === '') return;
+
+        // Censor profanity
+        messageText = profanityFilter(messageText);
+
+        // Create new message element
+        const message = document.createElement('div');
+        message.classList.add('message', 'user-message');
+        message.innerText = messageText;
+
+        // Add heart button functionality
+        const heartButton = document.createElement('span');
+        heartButton.classList.add('heart');
+        heartButton.innerHTML = '❤️';
+        heartButton.addEventListener('click', () => {
+            const heartIcon = document.createElement('span');
+            heartIcon.classList.add('heart', 'show');
+            heartIcon.innerHTML = '❤️';
+            message.appendChild(heartIcon);
+        });
+        message.appendChild(heartButton);
+
+        // Add reply button
+        const replyButton = document.createElement('button');
+        replyButton.classList.add('reply-button');
+        replyButton.innerText = 'Reply';
+        replyButton.addEventListener('click', () => {
+            displayReplyBox(messageText);
+        });
+        message.appendChild(replyButton);
+
+        // Append message to the chat
+        messagesDiv.appendChild(message);
+
+        // Save message to localStorage
+        const genre = genreSelect.value;
+        messages[genre].push(messageText);
+        localStorage.setItem('chatMessages', JSON.stringify(messages));
+
+        // Clear input and scroll to bottom
+        messageInput.value = '';
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // Function to display reply box
+    function displayReplyBox(originalMessage) {
+        const replyBox = document.createElement('div');
+        replyBox.classList.add('message', 'user-message');
+        replyBox.innerHTML = `
+            <div class="reply-box">Replying to: ${originalMessage}</div>
+            <textarea placeholder="Type your reply..." rows="3" style="width: 100%; padding: 10px;"></textarea>
+            <button class="reply-button" onclick="sendReply('${originalMessage}')">Send Reply</button>
+        `;
+        messagesDiv.appendChild(replyBox);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // Function to send a reply
+    function sendReply(originalMessage) {
+        const replyTextarea = document.querySelector('.message .user-message textarea');
+        const replyText = replyTextarea.value.trim();
+
+        if (replyText === '') return;
+
+        // Create the reply message element
+        const replyMessage = document.createElement('div');
+        replyMessage.classList.add('message', 'user-message');
+        replyMessage.innerHTML = `
+            <div class="reply-box">Replying to: ${originalMessage}</div>
+            <div>${replyText}</div>
+        `;
+        messagesDiv.appendChild(replyMessage);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // Profanity filter function
+    function profanityFilter(message) {
+        profanityList.forEach(word => {
+            const regex = new RegExp(`\\b${word}\\b`, 'gi');
+            message = message.replace(regex, '****');
+        });
+        return message;
+    }
+
+    // Load messages for the selected genre
+    function loadMessages() {
+        const genre = genreSelect.value;
+        messagesDiv.innerHTML = ''; // Clear current messages
+
+        messages[genre].forEach(msg => {
+            const message = document.createElement('div');
+            message.classList.add('message', 'other-message');
+            message.innerText = msg;
+
+            // Heart button
+            const heartButton = document.createElement('span');
+            heartButton.classList.add('heart');
+            heartButton.innerHTML = '❤️';
+            heartButton.addEventListener('click', () => {
+                const heartIcon = document.createElement('span');
+                heartIcon.classList.add('heart', 'show');
+                heartIcon.innerHTML = '❤️';
+                message.appendChild(heartIcon);
+            });
+            message.appendChild(heartButton);
+
+            // Reply button
+            const replyButton = document.createElement('button');
+            replyButton.classList.add('reply-button');
+            replyButton.innerText = 'Reply';
+            replyButton.addEventListener('click', () => {
+                displayReplyBox(msg);
+            });
+            message.appendChild(replyButton);
+
+            messagesDiv.appendChild(message);
+        });
+    }
+
+    // Initialize chat
+    genreSelect.addEventListener('change', loadMessages);
+    window.onload = loadMessages;
+</script>
