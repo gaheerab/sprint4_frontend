@@ -1,0 +1,309 @@
+---
+layout: base 
+title: Profile Building
+search_exclude: true
+permalink: /music/profile_building.html/
+---
+
+<style>
+    /* General styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+        font-size: 2.5em;
+    }
+    .section {
+        margin-bottom: 40px;
+    }
+    .question-card {
+        background-color: #1f1f1f;
+        color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .question-card h2 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+    .options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    .option {
+        background-color: #333;
+        padding: 10px 20px;
+        border-radius: 8px;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .option:hover {
+        background-color: #555;
+    }
+    .option.selected {
+        background-color: #fbbc04;
+        color: #333;
+    }
+    .checkmark {
+        display: none;
+        color: #28a745;
+        font-size: 1.5em;
+        margin-left: 10px;
+    }
+    .option.selected .checkmark {
+        display: inline;
+    }
+
+    /* Album rating system */
+    .album-rating {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    .album {
+        background-color: #1f1f1f;
+        color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        width: 200px;
+        text-align: center;
+    }
+    .album h3 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+    .stars {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        cursor: pointer;
+    }
+    .star {
+        width: 30px;
+        height: 30px;
+        border: 2px solid #fbbc04;
+        border-radius: 50%;
+        background-color: transparent;
+        transition: background-color 0.3s;
+    }
+    .star.filled {
+        background-color: #fbbc04;
+    }
+    .star:hover {
+        background-color: #f7bb3f;
+    }
+
+    /* Submit button style */
+    .submit-button {
+        display: block;
+        width: 200px;
+        padding: 10px;
+        margin: 20px auto;
+        background-color: #fbbc04;
+        color: #333;
+        text-align: center;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 1.2em;
+        transition: background-color 0.3s;
+    }
+    .submit-button:hover {
+        background-color: #f7bb3f;
+    }
+</style>
+
+<div class="container">
+    <h1>User Profile Setup</h1>
+
+    <!-- Profile Quiz Section -->
+    <div class="section">
+        <h2>Profile Quiz</h2>
+
+        <div class="question-card" id="question1">
+            <h2>Choose your favorite artist of these options:</h2>
+            <div class="options">
+                <div class="option" data-answer="Adele">Travis Scott <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Drake">Drake <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Taylor Swift">Taylor Swift <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Ed Sheeran">SZA <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Beyoncé">Frank Ocean <span class="checkmark">✔️</span></div>
+            </div>
+        </div>
+
+        <div class="question-card" id="question2">
+            <h2>Choose your music platform of choice:</h2>
+            <div class="options">
+                <div class="option" data-answer="Spotify">Spotify <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Apple Music">Apple Music <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="YouTube Music">YouTube Music <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Amazon Music">Amazon Music <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Tidal">Tidal <span class="checkmark">✔️</span></div>
+            </div>
+        </div>
+
+        <div class="question-card" id="question3">
+            <h2>How do you primarily learn about new music?</h2>
+            <div class="options">
+                <div class="option" data-answer="Social Media">Social Media <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Friends/Family">Friends/Family <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Music Blogs">Music Blogs <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Streaming Platform Recommendations">Streaming Platform Recommendations <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Radio">Radio <span class="checkmark">✔️</span></div>
+            </div>
+        </div>
+
+        <div class="question-card" id="question4">
+            <h2>How often do you listen to music?</h2>
+            <div class="options">
+                <div class="option" data-answer="Everyday">Everyday <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Several times a week">Several times a week <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Once a week">Once a week <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Several times a month">Several times a month <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Rarely">Rarely <span class="checkmark">✔️</span></div>
+            </div>
+        </div>
+
+        <div class="question-card" id="question5">
+            <h2>Which describes your favorite era of music?</h2>
+            <div class="options">
+                <div class="option" data-answer="2000s">2000s <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="90s">90s <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="80s">80s <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="70s">70s <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="2010s">2010s <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Present">Present (Modern Day) <span class="checkmark">✔️</span></div>
+            </div>
+        </div>
+
+        <div class="question-card" id="question6">
+            <h2>What is the most important aspect of a song for you?</h2>
+            <div class="options">
+                <div class="option" data-answer="Lyrics">Lyrics <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Beat">Beat <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Vocals">Vocals <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Rhythm">Rhythm <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Instrumentals">Instrumentals <span class="checkmark">✔️</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Albums with Ratings -->
+    <div class="section">
+        <h2>Rate Your Favorite Albums</h2>
+
+        <div class="album-rating">
+            <div class="album">
+                <h3>Drake - Certified Lover Boy</h3>
+                <div class="stars" data-album="CLB">
+                    <div class="star" data-star="1"></div>
+                    <div class="star" data-star="2"></div>
+                    <div class="star" data-star="3"></div>
+                    <div class="star" data-star="4"></div>
+                    <div class="star" data-star="5"></div>
+                </div>
+            </div>
+
+            <div class="album">
+                <h3>Adele - 30</h3>
+                <div class="stars" data-album="30">
+                    <div class="star" data-star="1"></div>
+                    <div class="star" data-star="2"></div>
+                    <div class="star" data-star="3"></div>
+                    <div class="star" data-star="4"></div>
+                    <div class="star" data-star="5"></div>
+                </div>
+            </div>
+
+            <div class="album">
+                <h3>Taylor Swift - Folklore</h3>
+                <div class="stars" data-album="Folklore">
+                    <div class="star" data-star="1"></div>
+                    <div class="star" data-star="2"></div>
+                    <div class="star" data-star="3"></div>
+                    <div class="star" data-star="4"></div>
+                    <div class="star" data-star="5"></div>
+                </div>
+            </div>
+
+            <div class="album">
+                <h3>Travis Scott - UTOPIA</h3>
+                <div class="stars" data-album="Divide">
+                    <div class="star" data-star="1"></div>
+                    <div class="star" data-star="2"></div>
+                    <div class="star" data-star="3"></div>
+                    <div class="star" data-star="4"></div>
+                    <div class="star" data-star="5"></div>
+                </div>
+            </div>
+
+            <div class="album">
+                <h3>SZA - SOS</h3>
+                <div class="stars" data-album="Lemonade">
+                    <div class="star" data-star="1"></div>
+                    <div class="star" data-star="2"></div>
+                    <div class="star" data-star="3"></div>
+                    <div class="star" data-star="4"></div>
+                    <div class="star" data-star="5"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button class="submit-button">Submit</button>
+
+</div>
+
+<script>
+    // Handle selection for quiz questions
+    const options = document.querySelectorAll('.option');
+    options.forEach(option => {
+        option.addEventListener('click', function() {
+            // Deselect previously selected option
+            const parent = option.closest('.question-card');
+            const selectedOption = parent.querySelector('.option.selected');
+            if (selectedOption) {
+                selectedOption.classList.remove('selected');
+            }
+            // Select the clicked option
+            option.classList.add('selected');
+        });
+    });
+
+    // Handle star rating for albums
+    const stars = document.querySelectorAll('.star');
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const album = star.closest('.album-rating').querySelector('.stars').dataset.album;
+            const rating = star.getAttribute('data-star');
+            const albumStars = document.querySelectorAll(`[data-album="${album}"] .star`);
+            albumStars.forEach(star => {
+                if (star.getAttribute('data-star') <= rating) {
+                    star.classList.add('filled');
+                } else {
+                    star.classList.remove('filled');
+                }
+            });
+        });
+    });
+</script>
