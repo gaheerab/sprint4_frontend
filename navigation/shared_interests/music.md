@@ -110,7 +110,7 @@ permalink: /music/
    <!-- Navigation Bar -->
    <div class="navbar">
        <a href="index.html">Home</a>
-       <a href="genre-chat.html">Genre-Specific Chat Rooms</a>
+       <a href="chat_room.html">Music Chatroom</a> <!-- Title changed here -->
        <a href="artist-recommendation.html">Artist Recommendations</a>
        <a href="user-playlists.html">User-Curated Playlists</a>
        <a href="song-voting.html">Song of the Day Voting</a>
@@ -118,11 +118,11 @@ permalink: /music/
    </div>
    <!-- Music Page Content -->
    <div class="container">
-       <!-- Genre-Specific Chat Rooms Section -->
-       <div class="section" id="genre-chat">
-           <h2>Genre-Specific Chat Rooms</h2>
+       <!-- Music Chatroom Section -->
+       <div class="section" id="chat_room">
+           <h2>Music Chatroom</h2> <!-- Title changed here -->
            <p>Chat about your favorite genres, songs, and albums in real-time!</p>
-           <button onclick="window.location.href='genre-chat.html'">Enter Chat Room</button>
+           <button onclick="window.location.href='chat_room.html'">Enter Chat Room</button> <!-- Button link updated -->
        </div>
        <!-- Artist Recommendation Section -->
        <div class="section" id="artist-recommendation">
@@ -147,6 +147,18 @@ permalink: /music/
            <h2>Music Reviews</h2>
            <p>Read and share reviews of albums, songs, and artists.</p>
            <button onclick="window.location.href='reviews.html'">Explore Reviews</button>
+       </div>
+       <!-- Profile Building Section -->
+       <div class="section" id="Profile Building">
+           <h2>Build Your Music Profile!</h2>
+           <p>Create your custom user profile for others to view!</p>
+           <button onclick="window.location.href='profile_building.html'">Discover Artists</button>
+       </div>
+        <!-- Profile Matching Section -->
+       <div class="section" id="Profile Matching">
+           <h2>Match With Other Users!</h2>
+           <p>Match with others based on your music perferences!</p>
+           <button onclick="window.location.href='profile_matching.html'">Discover Artists</button>
        </div>
    </div>
 </body>
