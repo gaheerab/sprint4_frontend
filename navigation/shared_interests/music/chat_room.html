@@ -16,6 +16,7 @@ permalink: /music/chat_room.html/
             <option value="classical">Classical</option>
             <option value="country">Country</option>
         </select>
+        <button id="reset-chat" class="reset-button">Reset Chat</button>
     </div>
     <div class="messages" id="messages">
         <!-- Messages will display here -->
@@ -66,6 +67,22 @@ permalink: /music/chat_room.html/
     .chat-select:hover {
         background-color: #ffcd3f;
     }
+    
+    .reset-button {
+        padding: 8px 12px;
+        font-size: 1em;
+        color: #e8eaed;
+        background-color: #d93025;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .reset-button:hover {
+        background-color: #ff5349;
+    }
+
 
     /* Chat Messages Display */
     .messages {
