@@ -115,6 +115,9 @@ permalink: /music/
        <a href="user-playlists.html">User-Curated Playlists</a>
        <a href="song-voting.html">Song of the Day Voting</a>
        <a href="reviews.html">Music Reviews</a>
+       <a href="userprofile_setup.html">User Profile</a>
+       <a href="profile_matching.html">Build Music Profile</a>
+       <a href="">Matching</a>
    </div>
    <!-- Music Page Content -->
    <div class="container">
