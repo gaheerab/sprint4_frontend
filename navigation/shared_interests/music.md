@@ -42,13 +42,13 @@ permalink: /music/
            justify-content: space-around;
            align-items: center;
            padding: 10px 20px;
-           background-color: #333;
+           background-color: #1c1c1c;
            position: sticky;
            top: 0;
            z-index: 10;
        }
        .navbar a {
-           color: #eaeaea;
+           color: #1c1c1c;
            text-decoration: none;
            font-size: 1.1em;
            padding: 8px 16px;
@@ -56,7 +56,7 @@ permalink: /music/
            border-bottom: 2px solid transparent;
        }
        .navbar a:hover {
-           color: #f0a500;
+           color: #0098f0;
            border-bottom: 2px solid #f0a500;
            font-weight: bold;
        }
@@ -80,7 +80,7 @@ permalink: /music/
            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
        }
        .section h2 {
-           color: #f0a500;
+           color: #0098f0;
            font-size: 1.5em;
            margin-bottom: 15px;
        }
@@ -91,17 +91,17 @@ permalink: /music/
        }
        /* Stylish Buttons */
        .section button {
-           background: linear-gradient(145deg, #f0a500, #d18b00);
+           background: linear-gradient(145deg, #0098f0, #5000f0);
            border: none;
            padding: 10px 20px;
            font-size: 1em;
-           color: #fff;
+           color: blue;
            cursor: pointer;
            border-radius: 5px;
            transition: background 0.3s ease, transform 0.3s ease;
        }
        .section button:hover {
-           background-color: #ffc107;
+           background-color: #0098f0;
            transform: scale(1.05);
        }
    </style>
@@ -116,8 +116,8 @@ permalink: /music/
        <a href="song-voting.html">Song of the Day Voting</a>
        <a href="reviews.html">Music Reviews</a>
        <a href="userprofile_setup.html">User Profile</a>
-       <a href="profile_matching.html">Build Music Profile</a>
-       <a href="">Matching</a>
+       <a href="profile_building.html">Build Music Profile</a>
+       <a href="profile_matching.html">Matching</a>
    </div>
    <!-- Music Page Content -->
    <div class="container">
