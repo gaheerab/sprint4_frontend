@@ -1,9 +1,9 @@
-title: DNHS Flocker
-description: "Social Media for Del Norte High School"
-owner_name: John Mortensen
-github_username: nighthawkcoders
-github_repo: "flocker_frontend" 
-baseurl: "/flocker_frontend"
+title: Melody Mates
+description: "Music Matching Social Media Website"
+owner_name: Hannah, Rowan, Carson, Gaheera, Brandon, Rhea
+github_username: gaheerb
+github_repo: "sprint4_backend" 
+baseurl: "/sprint4_frontend"
 future: true
 remote_theme: jekyll/minima
 minima:
@@ -22,3 +22,4 @@ header_pages:
   - navigation/voteforthegoat/home.md
   - navigation/share_and_care/home.md
   - navigation/rate_and_relate/home.md
+  - navigation/melodymates/home.md

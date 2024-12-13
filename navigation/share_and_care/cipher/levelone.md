@@ -127,11 +127,11 @@ This is a basic chat box rendered with HTML inside Markdown.
   }
 
   function retry() {
-    window.location.href = '/flocker_frontend/levelone/';
+    window.location.href = '/sprint4_frontend/levelone/';
   }
 
   function nextLevel() {
-    window.location.href = '/flocker_frontend/leveltwo/'; 
+    window.location.href = '/sprint4_frontend/leveltwo/'; 
   }
   
   sendButton.addEventListener('click', submitAnswer);

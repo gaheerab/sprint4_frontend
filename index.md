@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Flocker Social Media Site 
+title: Melody Mates Music Matching Site 
 search_exclude: true
-description: Login and explore our social media hub for everything DNHS 
+description: Login and start matching with those who have same music taste! 
 hide: true
 menu: nav/home.html
 ---

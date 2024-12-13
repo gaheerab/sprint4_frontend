@@ -7,7 +7,7 @@ import {
   deleteData,
   logoutUser,
 } from "../../js/api/profile.js";
-const redirectLoginLink = `${window.location.origin}/flocker_frontend/login`;
+const redirectLoginLink = `${window.location.origin}/sprint4_frontend/login`;
 
 async function fetchUserProfilePicture() {
   const URL = pythonURI + "/api/id/pfp"; // Endpoint to fetch user profile data
