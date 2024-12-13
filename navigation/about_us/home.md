@@ -2,7 +2,7 @@
 layout: post 
 title: About Us
 search_exclude: true
-permalink: /about_us/home
+permalink: /melodymates/about_us
 menu: nav/melodymates.html
 ---
 
