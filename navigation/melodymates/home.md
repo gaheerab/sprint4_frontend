@@ -1,6 +1,6 @@
 ---
 layout: post 
-title: MelodyMates
+title: Melody Mates
 search_exclude: true
 permalink: /melodymates/home
 menu: nav/melodymates.html
@@ -94,7 +94,6 @@ menu: nav/melodymates.html
 <body>
    <!-- Navigation Bar -->
    <div class="navbar">
-       <a href="index.html">Home</a>
        <a href="chat_room.html">Music Chatroom</a> <!-- Title changed here -->
        <a href="artist-recommendation.html">Artist Recommendations</a>
        <a href="user-playlists.html">User-Curated Playlists</a>
