@@ -92,11 +92,11 @@ search_exclude: true
     </div>
     <!-- Python Login Form -->
     <div class="login-card">
-        <h1 id="pythonTitle">User Login (Python)</h1>
+        <h1 id="pythonTitle">User Login</h1>
         <form id="pythonForm" onsubmit="pythonLogin(); return false;">
             <p>
                 <label>
-                    User ID:
+                    Username:
                     <input type="text" name="python-uid" id="python-uid" required>
                 </label>
             </p>

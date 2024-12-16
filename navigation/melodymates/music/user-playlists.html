@@ -4,49 +4,85 @@ title: user-playlists
 search_exclude: true
 permalink: /melodymates/user-playlists.html/
 ---
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Info</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .student-data {
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Student Information</h1>
-    <button onclick="fetchStudent('hannah')">Get Hannah's Info</button>
-    <button onclick="fetchStudent('rhea')">Get Rhea's Info</button>
-    <button onclick="fetchStudent('gaheera')">Get Gaheera's Info</button>
-    <button onclick="fetchStudent('brandon')">Get Brandons's Info</button>
-    <button onclick="fetchStudent('carson')">Get Carson's Info</button>
-    <button onclick="fetchStudent('rowan')">Get Rowan's Info</button>
 
-    <div id="studentInfo" class="student-data"></div>
+%%html
 
-    <script>
-        async function fetchStudent(studentName) {
-            const url = `http://localhost:8887/api/student/${studentName}`;  // Update the port here
-            try {
-                const response = await fetch(url);
-                if (response.ok) {
-                    const data = await response.json();
-                    document.getElementById('studentInfo').innerHTML = `
-                        <pre>${JSON.stringify(data, null, 2)}</pre>
-                    `;
-                } else {
-                    document.getElementById('studentInfo').innerText = 'Student not found';
-                }
-            } catch (error) {
-                document.getElementById('studentInfo').innerText = 'Error fetching data';
-                console.error('Error:', error);
-            }
-        }
-    </script>
-</body>
-</html>
+<h1>Access data from our Flask server using JavaScript</h1>
+
+<p>This code extracts data "live" from a local Web Server with JavaScript fetch.  Additionally, it formats the data into a table.</p>
+
+<!-- Head contains information to Support the Document -->
+
+
+<!-- HTML table fragment for page -->
+<table id="demo" class="table">
+  <thead>
+      <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Username</th>
+          <th>Favorite Artists</th>
+      </tr>
+  </thead>
+  <tbody id="result">
+    <!-- javascript generated data -->
+  </tbody>
+</table>
+
+<script>
+  // prepare HTML result container for new output
+  let resultContainer = document.getElementById("result");
+  
+  // prepare URL
+  url = "http://127.0.0.1:8887/api/student";
+
+
+  // set options for cross origin header request
+  let options = {
+    method: 'GET', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'include', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  // fetch the API
+  fetch(url, options)
+    // response is a RESTful "promise" on any successful fetch
+    .then(response => {
+      // check for response errors and display
+      if (response.status !== 200) {
+          console.error(response.status);
+          return;
+      }
+      console.log(response)
+      // valid response will contain json data
+      response.json().then(data => {
+          console.log(data);
+          // for (row of data) {
+            // tr and td build out for each row
+            const tr = document.createElement("tr");
+            const firstName = document.createElement("td");
+            const lastName = document.createElement("td");
+            const userName = document.createElement("td");
+            const favoriteArtist = document.createElement("td")
+
+            // data is specific to the API
+            firstName.innerHTML = data.Firstname; 
+            lastName.innerHTML = data.Lastname; 
+            userName.innerHTML = data.Username; 
+            favoriteArtist.innerHTML = data.FavoriteArtists;
+            // this builds each td into tr
+            tr.appendChild(firstName);
+            tr.appendChild(lastName);
+            tr.appendChild(userName);
+            tr.appendChild(favoriteArtist);
+            // add HTML to container
+            resultContainer.appendChild(tr);
+          }
+      )
+  })
+  
+</script>
