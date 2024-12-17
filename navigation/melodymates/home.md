@@ -151,7 +151,7 @@ menu: nav/melodymates.html
    <div class="navbar">
        <a href="chat_room.html">Music Chatroom</a>
        <a href="artist-recommendation.html">Artist Recommendations</a>
-       <a href="user-playlists.html">User-Curated Playlists</a>
+       <a href="user-data.html">User Data</a>
        <a href="song-voting.html">Song of the Day Voting</a>
        <a href="reviews.html">Music Reviews</a>
        <a href="userprofile_setup.html">User Profile</a>
