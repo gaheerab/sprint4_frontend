@@ -1,0 +1,86 @@
+---
+layout: base
+title: Created Profile
+search_exclude: true
+permalink: /melodymates/created_profile.html/
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }}'s Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #1c1c1c;
+            color: #eaeaea;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #282828;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #f0a500;
+            text-align: center;
+        }
+        img {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .bio {
+            margin: 15px 0;
+        }
+        .artists {
+            margin: 15px 0;
+        }
+        button {
+            background: linear-gradient(145deg, #f0a500, #d18b00);
+            border: none;
+            padding: 12px;
+            font-size: 1em;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s ease, transform 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+        button:hover {
+            background-color: #ffc107;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Meet {{ name }}'</h1>
+        {% if profile.picture_url %}
+        <img src="{{ profile.picture_url }}" alt="{{ name }}'s Profile Picture">
+        {% else %}
+        <p style="text-align: center; font-style: italic;">No profile picture provided.</p>
+        {% endif %}
+        <div class="bio">
+            <strong>Bio:</strong>
+            <p>{{ profile.bio }}</p>
+        </div>
+        <div class="artists">
+            <strong>Top 5 Favorite Artists:</strong>
+            <ul>
+                {% for artist in profile.artists %}
+                <li>{{ artist }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <button onclick="window.location.href='/'">Edit Profile</button>
+    </div>
+</body>
+</html>
