@@ -20,6 +20,7 @@ permalink: /melodymates/user-data.html/
           <th>First Name</th>
           <th>Last Name</th>
           <th>Username</th>
+          <th>Password</th>
           <th>Favorite Artists</th>
       </tr>
   </thead>
@@ -33,7 +34,7 @@ permalink: /melodymates/user-data.html/
   let resultContainer = document.getElementById("result");
   
   // prepare URL
-  url = "http://127.0.0.1:8887/api/student/Gaheera";
+  url = "http://127.0.0.1:8887/api/student/Hannah";
 
 
   // set options for cross origin header request
@@ -66,6 +67,7 @@ permalink: /melodymates/user-data.html/
             const firstName = document.createElement("td");
             const lastName = document.createElement("td");
             const userName = document.createElement("td");
+            const password = document.createElement("td");
             const favoriteArtist = document.createElement("td")
 
             // data is specific to the API
@@ -73,10 +75,12 @@ permalink: /melodymates/user-data.html/
             lastName.innerHTML = data.Lastname; 
             userName.innerHTML = data.Username; 
             favoriteArtist.innerHTML = data.FavoriteArtists;
+            password.innerHTML = data.Password
             // this builds each td into tr
             tr.appendChild(firstName);
             tr.appendChild(lastName);
             tr.appendChild(userName);
+            tr.appendChild(password);
             tr.appendChild(favoriteArtist);
             // add HTML to container
             resultContainer.appendChild(tr);
