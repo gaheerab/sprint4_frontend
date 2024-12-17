@@ -21,7 +21,7 @@ permalink: /melodymates/chat_room.html/
             padding: 8px;
             background-color: #f0f0f0;
             margin: 5px;
- }
+        }
         #userList li:hover {
             background-color: #ddd;
         }
@@ -34,9 +34,51 @@ permalink: /melodymates/chat_room.html/
             border: 1px solid #ddd;
             padding: 10px;
         }
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 60%;
+            text-align: center;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <!-- Moderator Rules Popup -->
+    <div id="rulesModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Moderator Rules</h2>
+            <p>Welcome to the chatroom! Please adhere to the following rules:</p>
+            <ul>
+                <li>No offensive language or harassment.</li>
+                <li>Be respectful to all participants.</li>
+                <li>Do not spam messages.</li>
+                <li>Follow moderators' guidance at all times.</li>
+            </ul>
+            <button id="acceptRules">Accept</button>
+        </div>
+    </div>
+
     <h1>Welcome to the Direct Messaging Chatroom</h1>
     <div id="login">
         <label for="username">Enter your username: </label>
@@ -60,23 +102,30 @@ permalink: /melodymates/chat_room.html/
         let currentUser = '';
         let selectedUser = '';
         let socket = null;
+        let allUsers = [];
 
-        // Simulate user data from a backend
-        const users = [
-            { id: 1, username: 'Alice' },
-            { id: 2, username: 'Bob' },
-            { id: 3, username: 'Charlie' },
-        ];
-
-        // Simulate database with messages between users
-        const messages = {};
-
-        // List of bad words to censor
+        const messages = {}; // Simulate message storage
         const badWords = ['fuck', 'shit', 'bitch', 'asshole', 'ass'];
 
+        // Show rules modal on load
+        window.onload = function () {
+            const rulesModal = document.getElementById("rulesModal");
+            rulesModal.style.display = "block";
+
+            document.getElementById("acceptRules").onclick = () => {
+                rulesModal.style.display = "none";
+            };
+            document.getElementById("closeModal").onclick = () => {
+                rulesModal.style.display = "none";
+            };
+        };
+
         function login() {
-            currentUser = document.getElementById("username").value;
+            currentUser = document.getElementById("username").value.trim();
             if (currentUser) {
+                if (!allUsers.includes(currentUser)) {
+                    allUsers.push(currentUser); // Add new user
+                }
                 document.getElementById("login").style.display = "none";
                 document.getElementById("userListContainer").style.display = "block";
                 displayUsers();
@@ -86,10 +135,10 @@ permalink: /melodymates/chat_room.html/
         function displayUsers() {
             const userList = document.getElementById("userList");
             userList.innerHTML = '';
-            users.forEach(user => {
-                if (user.username !== currentUser) {
+            allUsers.forEach(user => {
+                if (user !== currentUser) {
                     const li = document.createElement("li");
-                    li.textContent = user.username;
+                    li.textContent = user;
                     li.onclick = () => startChat(user);
                     userList.appendChild(li);
                 }
@@ -97,17 +146,17 @@ permalink: /melodymates/chat_room.html/
         }
 
         function startChat(user) {
-            selectedUser = user.username;
+            selectedUser = user;
             document.getElementById("chatWith").textContent = selectedUser;
             document.getElementById("userListContainer").style.display = "none";
             document.getElementById("chatBox").style.display = "block";
-            displayMessages(user);
+            displayMessages();
         }
 
-        function displayMessages(user) {
+        function displayMessages() {
             const messagesDiv = document.getElementById("messages");
             messagesDiv.innerHTML = '';
-            const chatKey = [currentUser, user.username].sort().join('-');
+            const chatKey = [currentUser, selectedUser].sort().join('-');
             if (messages[chatKey]) {
                 messages[chatKey].forEach(msg => {
                     const p = document.createElement("p");
@@ -118,10 +167,9 @@ permalink: /melodymates/chat_room.html/
         }
 
         function censorMessage(message) {
-            // Loop through the bad words and replace them with asterisks
             badWords.forEach(badWord => {
                 const regex = new RegExp(badWord, 'gi');
-                message = message.replace(regex, '****'); // Replace bad words with asterisks
+                message = message.replace(regex, '****');
             });
             return message;
         }
@@ -129,15 +177,13 @@ permalink: /melodymates/chat_room.html/
         document.getElementById("sendMessage").onclick = function () {
             let message = document.getElementById("messageInput").value;
             if (message) {
-                // Censor the message before adding it
                 message = censorMessage(message);
-
                 const chatKey = [currentUser, selectedUser].sort().join('-');
                 if (!messages[chatKey]) {
                     messages[chatKey] = [];
                 }
                 messages[chatKey].push(`${currentUser}: ${message}`);
-                displayMessages({ username: selectedUser });
+                displayMessages();
                 document.getElementById("messageInput").value = '';
             }
         };
