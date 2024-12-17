@@ -55,11 +55,11 @@ search_exclude: true
 <div class="login-container">
     <!-- Java Login Form -->
     <div class="login-card">
-        <h1 id="javaTitle"> User Login (Java)</h1>
+        <h1 id="javaTitle"> User Login</h1>
         <form id="javaForm" onsubmit="javaLogin(); return false;">
             <p>
                 <label>
-                    User ID:
+                    Username:
                     <input type="text" name="uid" id="uid" required>
                 </label>
             </p>
