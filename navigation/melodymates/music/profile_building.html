@@ -207,106 +207,10 @@ permalink: /melodymates/profile_building.html/
         </div>
     </div>
 
-    <!-- Albums with Ratings -->
-    <div class="section">
-        <h2>Rate Your Favorite Albums</h2>
 
-        <div class="album-rating">
-            <div class="album">
-                <h3>Drake - Certified Lover Boy</h3>
-                <div class="stars" data-album="CLB">
-                    <div class="star" data-star="1"></div>
-                    <div class="star" data-star="2"></div>
-                    <div class="star" data-star="3"></div>
-                    <div class="star" data-star="4"></div>
-                    <div class="star" data-star="5"></div>
-                </div>
-            </div>
 
-            <div class="album">
-                <h3>Adele - 30</h3>
-                <div class="stars" data-album="30">
-                    <div class="star" data-star="1"></div>
-                    <div class="star" data-star="2"></div>
-                    <div class="star" data-star="3"></div>
-                    <div class="star" data-star="4"></div>
-                    <div class="star" data-star="5"></div>
-                </div>
-            </div>
 
-            <div class="album">
-                <h3>Taylor Swift - Folklore</h3>
-                <div class="stars" data-album="Folklore">
-                    <div class="star" data-star="1"></div>
-                    <div class="star" data-star="2"></div>
-                    <div class="star" data-star="3"></div>
-                    <div class="star" data-star="4"></div>
-                    <div class="star" data-star="5"></div>
-                </div>
-            </div>
 
-            <div class="album">
-                <h3>Travis Scott - UTOPIA</h3>
-                <div class="stars" data-album="Divide">
-                    <div class="star" data-star="1"></div>
-                    <div class="star" data-star="2"></div>
-                    <div class="star" data-star="3"></div>
-                    <div class="star" data-star="4"></div>
-                    <div class="star" data-star="5"></div>
-                </div>
-            </div>
-
-            <div class="album">
-                <h3>SZA - SOS</h3>
-                <div class="stars" data-album="Lemonade">
-                    <div class="star" data-star="1"></div>
-                    <div class="star" data-star="2"></div>
-                    <div class="star" data-star="3"></div>
-                    <div class="star" data-star="4"></div>
-                    <div class="star" data-star="5"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Submit Button -->
-    <button class="submit-button">Submit</button>
-
-</div>
-
-<script>
-    // Handle selection for quiz questions
-    const options = document.querySelectorAll('.option');
-    options.forEach(option => {
-        option.addEventListener('click', function() {
-            // Deselect previously selected option
-            const parent = option.closest('.question-card');
-            const selectedOption = parent.querySelector('.option.selected');
-            if (selectedOption) {
-                selectedOption.classList.remove('selected');
-            }
-            // Select the clicked option
-            option.classList.add('selected');
-        });
-    });
-
-    // Handle star rating for albums
-    const stars = document.querySelectorAll('.star');
-    stars.forEach(star => {
-        star.addEventListener('click', function() {
-            const album = star.closest('.album-rating').querySelector('.stars').dataset.album;
-            const rating = star.getAttribute('data-star');
-            const albumStars = document.querySelectorAll(`[data-album="${album}"] .star`);
-            albumStars.forEach(star => {
-                if (star.getAttribute('data-star') <= rating) {
-                    star.classList.add('filled');
-                } else {
-                    star.classList.remove('filled');
-                }
-            });
-        });
-    });
-</script>
 
 
 
@@ -316,7 +220,7 @@ permalink: /melodymates/profile_building.html/
 <html lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Information</title>
+    <title>Admin Examples</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -336,9 +240,11 @@ permalink: /melodymates/profile_building.html/
             border: 1px solid #ccc;
             border-radius: 5px;
             max-width: 400px;
+            color: black; /* Ensure text is visible */
         }
     </style>
-    <h1>User Information</h1>
+
+    <h1>Admin Examples</h1>
     <div class="button-container">
         <button onclick="fetchUser('Hannah')">Hannah</button>
         <button onclick="fetchUser('Rhea')">Rhea</button>
@@ -350,7 +256,7 @@ permalink: /melodymates/profile_building.html/
     <div id="user-info" class="user-info"></div>
 
     <script>
-        const apiUrl = 'http://127.0.0.1:8887/api/user/Brandon';
+        const apiUrl = 'http://127.0.0.1:8887/api/data';
 
         async function fetchUser(name) {
             const response = await fetch(`${apiUrl}/${name}`);
@@ -372,4 +278,4 @@ permalink: /melodymates/profile_building.html/
             }
         }
     </script>
-</html>
+
