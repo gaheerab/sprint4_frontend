@@ -46,12 +46,13 @@ permalink: /melodymates/chat_room.html/
             background-color: rgba(0, 0, 0, 0.5);
         }
         .modal-content {
-            background-color: #fff;
+            background-color: #ADD8E6;  /* Light blue background */
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
             width: 60%;
             text-align: center;
+            color: black;  /* Black text */
         }
         .close {
             color: #aaa;
@@ -110,13 +111,13 @@ permalink: /melodymates/chat_room.html/
         // Show rules modal on load
         window.onload = function () {
             const rulesModal = document.getElementById("rulesModal");
-            rulesModal.style.display = "block";
+            rulesModal.style.display = "block";  // Ensure modal is shown on load
 
             document.getElementById("acceptRules").onclick = () => {
-                rulesModal.style.display = "none";
+                rulesModal.style.display = "none"; // Hide the modal when accepted
             };
             document.getElementById("closeModal").onclick = () => {
-                rulesModal.style.display = "none";
+                rulesModal.style.display = "none"; // Hide the modal when closed
             };
         };
 
