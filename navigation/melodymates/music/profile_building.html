@@ -204,58 +204,71 @@ permalink: /melodymates/profile_building.html/
             </div>
         </div>
 
-        <!-- Submit Button -->
-        <button class="submit-btn" id="submitBtn">Submit Choices</button>
+
+
+
+
+
+
+
+
+<html lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Profile Examples</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .button-container {
+            margin-bottom: 20px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 15px;
+            font-size: 16px;
+        }
+        .user-info {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            max-width: 400px;
+        }
+    </style>
+    <h1>User Information</h1>
+    <div class="button-container">
+        <button onclick="fetchUser('Hannah')">Hannah</button>
+        <button onclick="fetchUser('Rhea')">Rhea</button>
+        <button onclick="fetchUser('Gaheera')">Gaheera</button>
+        <button onclick="fetchUser('Carson')">Carson</button>
+        <button onclick="fetchUser('Rowan')">Rowan</button>
+        <button onclick="fetchUser('Brandon')">Brandon</button>
     </div>
-</div>
+    <div id="user-info" class="user-info"></div>
 
-<script>
-    const apiUrl = 'http://127.0.0.1:8887/api/data/musicpref';
+    <script>
+        const apiUrl = 'http://127.0.0.1:8887/api/user/Brandon';
 
-    let responses = {
-        name: '',
-        uid: '',
-        artistPref: '',
-        platformPref: '',
-        newMusic: '',
-        howOften: '',
-        era: '',
-        favoriteAspect: ''
-    };
+        async function fetchUser(name) {
+            const response = await fetch(`${apiUrl}/${name}`);
+            const userInfoDiv = document.getElementById('user-info');
 
-    document.querySelectorAll(".options").forEach((optionsContainer) => {
-        optionsContainer.addEventListener("click", (event) => {
-            const option = event.target.closest(".option");
-            if (option) {
-                // Get the question ID
-                const questionId = option.closest(".question-card").id;
-                // Set the response
-                responses[questionId] = option.getAttribute('data-answer');
-
-                // Deselect all options in the group
-                optionsContainer.querySelectorAll(".option").forEach((opt) => opt.classList.remove("selected"));
-
-                // Select the clicked option
-                option.classList.add("selected");
+            if (response.ok) {
+                const data = await response.json();
+                userInfoDiv.innerHTML = `
+                    <h2>${name}'s Information</h2>
+                    <p><strong>Preferred Artist:</strong> ${data.ArtistPref}</p>
+                    <p><strong>Listening Method:</strong> ${data.Method}</p>
+                    <p><strong>New Music Source:</strong> ${data.NewMusic}</p>
+                    <p><strong>Listening Frequency:</strong> ${data.HowOften}</p>
+                    <p><strong>Favorite Era:</strong> ${data.Era}</p>
+                    <p><strong>Favorite Aspect:</strong> ${data.FavoriteAspect}</p>
+                `;
+            } else {
+                userInfoDiv.innerHTML = `<p>Error: Could not fetch data for ${name}.</p>`;
             }
-        });
-    });
-
-    document.getElementById("submitBtn").addEventListener("click", () => {
-        responses.name = document.getElementById("name").value;
-        responses.uid = document.getElementById("uid").value;
-
-        fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(responses),
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert('Your responses have been submitted!');
-        })
-        .catch(error => console.error('Error:', error));
-    });
-</script>
+        }
+    </script>
+</html>
