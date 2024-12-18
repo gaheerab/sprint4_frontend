@@ -6,6 +6,7 @@ permalink: /melodymates/chat_room.html/
 ---
 
 <html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Chat</title>
@@ -14,34 +15,21 @@ permalink: /melodymates/chat_room.html/
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: #e0f7ff; /* Light blue background */
+            color: black;
         }
         #chat-container {
             display: flex;
             flex-direction: column;
             max-width: 800px;
             margin: 20px auto;
-            border: 1px solid #ddd;
+            border: 1px solid #1c4c90;
             border-radius: 8px;
-            background: #fff;
+            background: #010a47;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        #user-list, #chat-box {
+        #user-select, #chat-box {
             padding: 20px;
-        }
-        #user-list {
-            border-bottom: 1px solid #ddd;
-        }
-        .user {
-            cursor: pointer;
-            padding: 5px;
-            margin: 5px 0;
-            border-radius: 4px;
-            background: #d0e7ff;
-            color: black;
-        }
-        .user:hover {
-            background: #a8d1ff;
         }
         #chat-messages {
             height: 300px;
@@ -49,8 +37,6 @@ permalink: /melodymates/chat_room.html/
             border: 1px solid #ddd;
             padding: 10px;
             margin-bottom: 10px;
-            background-color: #d0e7ff;
-            color: black;
         }
         .message {
             margin-bottom: 10px;
@@ -64,7 +50,7 @@ permalink: /melodymates/chat_room.html/
         }
         #chat-form input, #chat-form button {
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid hsl(249, 82%, 75%);
             border-radius: 4px;
         }
         #chat-form button {
@@ -75,59 +61,18 @@ permalink: /melodymates/chat_room.html/
         #chat-form button:hover {
             background-color: #0056b3;
         }
-
-        #moderator-rules {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        #rules-box {
-            background-color: #d0e7ff;
-            color: black;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            max-width: 500px;
-            text-align: center;
-        }
-        #rules-box button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        #rules-box button:hover {
-            background-color: #0056b3;
+        #user-dropdown {
+            margin-bottom: 20px;
         }
     </style>
-    <div id="moderator-rules">
-        <div id="rules-box">
-            <h3>Moderator Rules</h3>
-            <p>Please follow these rules while using the chatroom:</p>
-            <ul style="text-align: left;">
-                <li>Be respectful to others.</li>
-                <li>No offensive language or behavior.</li>
-                <li>Do not share personal information.</li>
-                <li>Follow all community guidelines.</li>
-            </ul>
-            <button onclick="agreeToRules()">I Agree</button>
-        </div>
-    </div>
-
+</head>
+<body>
     <div id="chat-container">
-        <div id="user-list">
-            <h3>Active Users</h3>
-            <div id="users"></div>
+        <div id="user-select">
+            <h3>Select a User to Chat With</h3>
+            <select id="user-dropdown">
+                <option value="" disabled selected>Select a user</option>
+            </select>
         </div>
         <div id="chat-box">
             <h3>Chat with <span id="chatting-with">No one</span></h3>
@@ -141,49 +86,51 @@ permalink: /melodymates/chat_room.html/
 
     <script>
         const apiBase = 'http://127.0.0.1:5001/api';
-        const currentUser = 'rowangs'; // Example username, set dynamically if needed
+        const currentUser = 'rowangs'; // Example username, replace with actual logged-in user
         let chattingWith = null;
 
-        // Agree to rules and hide the pop-up
-        function agreeToRules() {
-            document.getElementById('moderator-rules').style.display = 'none';
-        }
-
-        // Fetch active users
+        // Fetch active users and populate dropdown
         async function fetchUsers() {
-            const response = await fetch(`${apiBase}/users`);
-            const users = await response.json();
-            renderUsers(users);
+            try {
+                const response = await fetch(`${apiBase}/users`);
+                const users = await response.json();
+                populateUserDropdown(users);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
         }
 
-        // Render active users
-        function renderUsers(users) {
-            const usersDiv = document.getElementById('users');
-            usersDiv.innerHTML = '';
+        // Populate the dropdown with users
+        function populateUserDropdown(users) {
+            const userDropdown = document.getElementById('user-dropdown');
+            userDropdown.innerHTML = '<option value="" disabled selected>Select a user</option>';
             users.forEach(user => {
                 if (user !== currentUser) {
-                    const userDiv = document.createElement('div');
-                    userDiv.className = 'user';
-                    userDiv.textContent = user;
-                    userDiv.onclick = () => startChat(user);
-                    usersDiv.appendChild(userDiv);
+                    const option = document.createElement('option');
+                    option.value = user;
+                    option.textContent = user;
+                    userDropdown.appendChild(option);
                 }
             });
         }
 
-        // Start chat with a user
-        function startChat(user) {
-            chattingWith = user;
-            document.getElementById('chatting-with').textContent = user;
+        // Start chat when user is selected
+        document.getElementById('user-dropdown').addEventListener('change', (event) => {
+            chattingWith = event.target.value;
+            document.getElementById('chatting-with').textContent = chattingWith;
             fetchChatHistory();
-        }
+        });
 
         // Fetch chat history
         async function fetchChatHistory() {
             if (!chattingWith) return;
-            const response = await fetch(`${apiBase}/chat/${currentUser}/${chattingWith}`);
-            const messages = await response.json();
-            renderChatMessages(messages);
+            try {
+                const response = await fetch(`${apiBase}/chat/${currentUser}/${chattingWith}`);
+                const messages = await response.json();
+                renderChatMessages(messages);
+            } catch (error) {
+                console.error('Error fetching chat history:', error);
+            }
         }
 
         // Render chat messages
@@ -202,31 +149,37 @@ permalink: /melodymates/chat_room.html/
         // Send a message
         async function sendMessage(event) {
             event.preventDefault();
-            if (!chattingWith) return alert('Select a user to chat with.');
+            if (!chattingWith) {
+                alert('Select a user to chat with.');
+                return;
+            }
 
             const messageInput = document.getElementById('chat-input');
             const message = messageInput.value;
 
-            await fetch(`${apiBase}/chat`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    sender: currentUser,
-                    receiver: chattingWith,
-                    message: message
-                })
-            });
-
-            messageInput.value = '';
-            fetchChatHistory();
+            try {
+                await fetch(`${apiBase}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        sender: currentUser,
+                        receiver: chattingWith,
+                        message: message,
+                    }),
+                });
+                messageInput.value = '';
+                fetchChatHistory();
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
         }
 
         document.getElementById('chat-form').addEventListener('submit', sendMessage);
 
-        // Fetch users periodically
-        setInterval(fetchUsers, 5000); // Update user list every 5 seconds
+        // Fetch users on load
         fetchUsers();
     </script>
+</body>
 </html>
