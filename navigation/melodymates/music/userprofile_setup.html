@@ -70,17 +70,22 @@ permalink: /melodymates/userprofile_setup.html/
             font-size: 0.9em;
             color: #ccc;
         }
+        .error-message {
+            color: #ff5555;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Setup Your Profile</h1>
-        <form id="profileForm" action="/submit_profile" method="POST" enctype="multipart/form-data">
+        <form id="profileForm" onsubmit="return handleFormSubmission(event)">
             <label for="name">Your Name:</label>
             <input type="text" id="name" name="name" required>
 
             <label for="bio">Bio:</label>
             <textarea id="bio" name="bio" rows="4" required></textarea>
+            <div id="bioError" class="error-message"></div>
 
             <label for="artists">Top 5 Favorite Artists:</label>
             <input type="text" id="artists" name="artists" placeholder="Comma-separated list" required>
@@ -103,7 +108,38 @@ permalink: /melodymates/userprofile_setup.html/
             const noPictureCheckbox = document.getElementById('noPicture');
             profilePictureInput.disabled = noPictureCheckbox.checked;
         }
+
+        function handleFormSubmission(event) {
+            event.preventDefault(); // Prevent form from reloading the page
+
+            const bio = document.getElementById('bio').value.trim();
+            const wordCount = bio.split(/\s+/).filter(word => word).length;
+            const errorDiv = document.getElementById('bioError');
+
+            // Validate bio
+            if (wordCount < 1 || wordCount > 25) {
+                errorDiv.textContent = "Bio must be between 1 and 25 words.";
+                return false;
+            } else {
+                errorDiv.textContent = "";
+            }
+
+            // Collect form data
+            const name = document.getElementById('name').value;
+            const artists = document.getElementById('artists').value.split(',').map(a => a.trim());
+            const profilePicture = document.getElementById('profilePicture').files[0];
+
+            // Save data (use this block if backend is available, else skip)
+            console.log({
+                name,
+                bio,
+                artists,
+                profilePicture: profilePicture ? profilePicture.name : "No Picture"
+            });
+
+            // Redirect to created profile page
+            window.location.href = "{{ site.baseurl }}/melodymates/created_profile.html/";
+        }
     </script>
-  <script src="/scripts/musicprofile.js"></script>  
 </body>
 </html>
