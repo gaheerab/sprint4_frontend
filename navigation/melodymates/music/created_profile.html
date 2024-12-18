@@ -4,83 +4,89 @@ title: Created Profile
 search_exclude: true
 permalink: /melodymates/created_profile.html/
 ---
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ name }}'s Profile</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Profile Display</title>
     <style>
+        /* General styling for the page */
         body {
-            background-color: #1c1c1c;
-            color: #eaeaea;
-            font-family: Arial, sans-serif;
+            font-family: 'Comic Sans MS', 'Comic Neue', cursive; /* Playful font */
+            background-color: #001f3f; /* Dark blue background */
+            color: #ffffff; /* White text */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
         }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background-color: #282828;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
+
         h1 {
-            color: #f0a500;
+            font-size: 2.5rem;
+            color: #00aaff; /* Light blue text for heading */
+            text-shadow: 2px 2px #004080; /* Dark blue shadow */
+            margin-bottom: 20px;
+        }
+
+        #profile {
+            background-color: #003366; /* Darker blue for the profile card */
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Subtle shadow */
             text-align: center;
+            width: 80%;
+            max-width: 400px;
         }
-        img {
-            display: block;
-            margin: 20px auto;
-            max-width: 100%;
-            border-radius: 10px;
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin: 10px 0;
         }
-        .bio {
-            margin: 15px 0;
+
+        strong {
+            color: #00aaff; /* Light blue emphasis */
+            font-weight: bold;
         }
-        .artists {
-            margin: 15px 0;
-        }
-        button {
-            background: linear-gradient(145deg, #f0a500, #d18b00);
-            border: none;
-            padding: 12px;
-            font-size: 1em;
-            color: #fff;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background 0.3s ease, transform 0.3s ease;
-            display: block;
-            margin: 0 auto;
-        }
-        button:hover {
-            background-color: #ffc107;
-            transform: scale(1.05);
+
+        /* Adding a smooth hover effect */
+        #profile p:hover {
+            color: #ffffff; /* Maintain white text */
+            transform: scale(1.05); /* Slightly enlarge on hover */
+            transition: transform 0.3s ease;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Meet {{ name }}'</h1>
-        {% if profile.picture_url %}
-        <img src="{{ profile.picture_url }}" alt="{{ name }}'s Profile Picture">
-        {% else %}
-        <p style="text-align: center; font-style: italic;">No profile picture provided.</p>
-        {% endif %}
-        <div class="bio">
-            <strong>Bio:</strong>
-            <p>{{ profile.bio }}</p>
-        </div>
-        <div class="artists">
-            <strong>Top 5 Favorite Artists:</strong>
-            <ul>
-                {% for artist in profile.artists %}
-                <li>{{ artist }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        <button onclick="window.location.href='/'">Edit Profile</button>
+    <h1>Gaheera's Profile</h1>
+    <div id="profile">
+        <p><strong>Name:</strong> <span id="name"></span></p>
+        <p><strong>Bio:</strong> <span id="bio"></span></p>
+        <p><strong>Favorite Artists:</strong> <span id="favoriteArtists"></span></p>
     </div>
+
+    <script>
+        // Fetch Gaheera's profile data from the backend
+        fetch('http://127.0.0.1:8887/api/profile/Gaheera') // Adjust the URL if needed
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Populate the HTML with the fetched data
+                document.getElementById('name').textContent = data.Name;
+                document.getElementById('bio').textContent = data.Bio;
+                document.getElementById('favoriteArtists').textContent = data.FavoriteArtists;
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    </script>
 </body>
 </html>
