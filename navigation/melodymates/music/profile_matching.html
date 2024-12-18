@@ -31,7 +31,7 @@ permalink: /melodymates/profile_matching.html/
 
         .card {
             position: absolute;
-            top: 50%;
+            top: 52%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 90%;
@@ -104,18 +104,15 @@ permalink: /melodymates/profile_matching.html/
             opacity: 0;
         }
     </style>
-</head>
-
-<body>
     <div class="container">
         <div id="card" class="card">
             <div class="profile-img"></div>
-            <div class="card-header">User 1</div>
+            <div class="card-header">User: Alex</div>
             <div class="card-body">
-                <p><strong>Music Genre:</strong> Placeholder</p>
-                <p><strong>Favorite Artist:</strong> Placeholder</p>
-                <p><strong>Top Song:</strong> Placeholder</p>
-                <p><strong>Listening Time:</strong> Placeholder</p>
+                <p><strong>Music Genre:</strong> Rock</p>
+                <p><strong>Favorite Artist:</strong> The Beatles</p>
+                <p><strong>Top Song:</strong> Hey Jude</p>
+                <p><strong>Listening Time:</strong> 10 hrs/week</p>
             </div>
             <div class="buttons">
                 <span id="reject" class="button x">❌</span>
@@ -134,12 +131,12 @@ permalink: /melodymates/profile_matching.html/
             newCard.classList.add('card');
             newCard.innerHTML = `
                 <div class="profile-img"></div>
-                <div class="card-header">User Placeholder</div>
+                <div class="card-header">User: Placeholder</div>
                 <div class="card-body">
-                    <p><strong>Music Genre:</strong> Placeholder</p>
-                    <p><strong>Favorite Artist:</strong> Placeholder</p>
-                    <p><strong>Top Song:</strong> Placeholder</p>
-                    <p><strong>Listening Time:</strong> Placeholder</p>
+                    <p><strong>Music Genre:</strong> Jazz</p>
+                    <p><strong>Favorite Artist:</strong> Miles Davis</p>
+                    <p><strong>Top Song:</strong> So What</p>
+                    <p><strong>Listening Time:</strong> 8 hrs/week</p>
                 </div>
                 <div class="buttons">
                     <span class="button x">❌</span>
@@ -148,7 +145,6 @@ permalink: /melodymates/profile_matching.html/
             `;
             container.appendChild(newCard);
 
-            // Add functionality to new buttons
             const newApproveButton = newCard.querySelector('.check');
             const newRejectButton = newCard.querySelector('.x');
 
@@ -178,6 +174,26 @@ permalink: /melodymates/profile_matching.html/
             moveCard(card, 'left');
         });
     </script>
-</body>
 
+    <script>
+        // Send decision to the backend API
+        async function sendDecision(username, decision) {
+            const response = await fetch('http://127.0.0.1:5000/api/user-status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: username, decision: decision })
+            });
+
+            const result = await response.json();
+            console.log("Decision sent:", result);
+        }
+
+        document.getElementById("approve").addEventListener("click", () => {
+            sendDecision("Alex", "approved");
+        });
+
+        document.getElementById("reject").addEventListener("click", () => {
+            sendDecision("Alex", "rejected");
+        });
+    </script>
 </html>
