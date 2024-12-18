@@ -307,3 +307,83 @@ permalink: /melodymates/profile_building.html/
         });
     });
 </script>
+
+
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 20px;
+        }
+        h1 {
+            color: #4682B4;
+        }
+        .user-info {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #fff;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #4682B4;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #315f7d;
+        }
+    </style>
+    <h1>User Information</h1>
+    <div id="buttons">
+        <button onclick="fetchUser('Hannah')">Get Hannah's Info</button>
+        <button onclick="fetchUser('Rhea')">Get Rhea's Info</button>
+        <button onclick="fetchUser('Gaheera')">Get Gaheera's Info</button>
+        <button onclick="fetchUser('Carson')">Get Carson's Info</button>
+        <button onclick="fetchUser('Rowan')">Get Rowan's Info</button>
+        <button onclick="fetchUser('Brandon')">Get Brandon's Info</button>
+    </div>
+    <div id="user-info" class="user-info"></div>
+
+    <script>
+        const apiUrl = 'http://127.0.0.1:8887/api/user'; // Replace with your actual Flask server URL
+
+        function fetchUser(userName) {
+            fetch(`${apiUrl}/${userName}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('User not found');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayUserInfo(data);
+                })
+                .catch(error => {
+                    document.getElementById('user-info').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+                });
+        }
+
+        function displayUserInfo(data) {
+            const userInfoDiv = document.getElementById('user-info');
+            userInfoDiv.innerHTML = `
+                <h3>${data.ArtistPref}</h3>
+                <p><strong>Preferred Method:</strong> ${data.Method}</p>
+                <p><strong>Discovers New Music Through:</strong> ${data.NewMusic}</p>
+                <p><strong>How Often They Listen:</strong> ${data.HowOften}</p>
+                <p><strong>Favorite Music Era:</strong> ${data.Era}</p>
+                <p><strong>Favorite Aspect:</strong> ${data.FavoriteAspect}</p>
+            `;
+        }
+    </script>
+</html>
