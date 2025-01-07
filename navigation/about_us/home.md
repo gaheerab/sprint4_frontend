@@ -5,23 +5,6 @@ search_exclude: true
 permalink: /melodymates/about_us
 menu: nav/melodymates.html
 ---
-Why we created Melody Mates:
-
-To connect people through their shared love of music. The site offers features like artist recommendations, personalized user profiles, and more. These elements foster meaningful interactions  while engaging in a collaborative, safe community. 
-
----
-layout: post
-title: About Us
-search_exclude: true
-permalink: /melodymates/about_us
-menu: nav/melodymates.html
----
-
-<div style="display: flex; gap: 10px;">
-<img alt="musicnotes" src="/sprint4_frontend/images/musicnotes.jpg" width="300" height="200"> 
-
-<img alt="concert" src="/sprint4_frontend/images/concert.jpg" width="300" height="200"> 
-</div>
 
 <html lang="en">
    <meta charset="UTF-8">
@@ -118,6 +101,11 @@ menu: nav/melodymates.html
            <p>At MelodyMates, our vision is to create a community where music lovers can connect, share, and collaborate. We believe music is a universal language, and we strive to offer a space where individuals can discover new sounds, create personalized playlists, and have real-time discussions about their favorite music.</p>
        </div>
 
+<img alt="musicnotes" src="/sprint4_frontend/images/musicnotes.jpg" width="300" height="200"> 
+
+
+       <div style="display: flex; gap: 10px;">
+
        <div class="section">
            <h2>What We Do</h2>
            <p>MelodyMates is more than just a platform—it's a space for creativity and connection. From our live chatrooms where users can discuss music in real-time, to personalized artist recommendations, we help users discover and connect with music that resonates with them. Our platform is built using modern web technologies to ensure a seamless, engaging experience.</p>
@@ -131,7 +119,11 @@ menu: nav/melodymates.html
        </div>
    </div>
 
+<img alt="concert" src="/sprint4_frontend/images/concert.jpg" width="300" height="200"> </div>
+
    <div class="footer">
        <p>&copy; 2024 MelodyMates | All Rights Reserved</p>
    </div>
 </html>
+
+
