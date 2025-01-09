@@ -1,11 +1,13 @@
 ---
-layout: base 
+layout: base
 title: Profile Matching
 search_exclude: true
 permalink: /melodymates/profile_matching.html/
 ---
 
+
 <html lang="en">
+
 
 <head>
     <meta charset="UTF-8">
@@ -22,12 +24,14 @@ permalink: /melodymates/profile_matching.html/
             font-family: Arial, sans-serif;
         }
 
+
         .container {
             position: relative;
             width: 500px;
             height: 700px;
             overflow: hidden;
         }
+
 
         .card {
             position: absolute;
@@ -45,6 +49,7 @@ permalink: /melodymates/profile_matching.html/
             z-index: 1;
         }
 
+
         .profile-img {
             width: 100px;
             height: 100px;
@@ -54,6 +59,7 @@ permalink: /melodymates/profile_matching.html/
             margin-bottom: 20px;
         }
 
+
         .card-header {
             font-size: 1.5rem;
             font-weight: bold;
@@ -61,19 +67,23 @@ permalink: /melodymates/profile_matching.html/
             margin-bottom: 20px;
         }
 
+
         .card-body {
             margin-bottom: 20px;
         }
+
 
         .card-body p {
             margin: 5px 0;
             color: #888;
         }
 
+
         .buttons {
             display: flex;
             justify-content: space-between;
         }
+
 
         .button {
             font-size: 2rem;
@@ -82,22 +92,27 @@ permalink: /melodymates/profile_matching.html/
             transition: transform 0.2s ease;
         }
 
+
         .button:hover {
             transform: scale(1.2);
         }
+
 
         .check {
             color: green;
         }
 
+
         .x {
             color: red;
         }
+
 
         .card-move-left {
             transform: translateX(-500px);
             opacity: 0;
         }
+
 
         .card-move-right {
             transform: translateX(500px);
@@ -121,10 +136,12 @@ permalink: /melodymates/profile_matching.html/
         </div>
     </div>
 
+
     <script>
         const approveButton = document.getElementById('approve');
         const rejectButton = document.getElementById('reject');
         const container = document.querySelector('.container');
+
 
         const createNewCard = () => {
             const newCard = document.createElement('div');
@@ -145,17 +162,21 @@ permalink: /melodymates/profile_matching.html/
             `;
             container.appendChild(newCard);
 
+
             const newApproveButton = newCard.querySelector('.check');
             const newRejectButton = newCard.querySelector('.x');
+
 
             newApproveButton.addEventListener('click', () => {
                 moveCard(newCard, 'right');
             });
 
+
             newRejectButton.addEventListener('click', () => {
                 moveCard(newCard, 'left');
             });
         }
+
 
         const moveCard = (cardElement, direction) => {
             cardElement.classList.add(`card-move-${direction}`);
@@ -166,14 +187,17 @@ permalink: /melodymates/profile_matching.html/
             }, 300);
         }
 
+
         approveButton.addEventListener('click', () => {
             moveCard(card, 'right');
         });
+
 
         rejectButton.addEventListener('click', () => {
             moveCard(card, 'left');
         });
     </script>
+
 
     <script>
         // Send decision to the backend API
@@ -184,13 +208,16 @@ permalink: /melodymates/profile_matching.html/
                 body: JSON.stringify({ username: username, decision: decision })
             });
 
+
             const result = await response.json();
             console.log("Decision sent:", result);
         }
 
+
         document.getElementById("approve").addEventListener("click", () => {
             sendDecision("Alex", "approved");
         });
+
 
         document.getElementById("reject").addEventListener("click", () => {
             sendDecision("Alex", "rejected");
