@@ -14,6 +14,7 @@ permalink: /melodymates/profile_matching.html/
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Match</title>
     <style>
+        /* General Styles */
         body {
             display: flex;
             justify-content: center;
@@ -21,25 +22,38 @@ permalink: /melodymates/profile_matching.html/
             height: 100vh;
             margin: 0;
             background-color: #f4f4f4;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            color: #333;
         }
-
 
         .container {
             position: relative;
-            width: 500px;
+            width: 600px;
             height: 700px;
             overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
         }
 
+        /* Header Styles */
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
 
+        /* Card Styles */
         .card {
             position: absolute;
-            top: 52%;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 90%;
-            height: 500px;
+            width: 100%;
+            max-width: 500px;
+            height: 400px;
             background-color: #fff;
             padding: 20px;
             border-radius: 10px;
@@ -49,80 +63,79 @@ permalink: /melodymates/profile_matching.html/
             z-index: 1;
         }
 
-
+        /* Profile Image Styles */
         .profile-img {
-            width: 100px;
-            height: 100px;
-            background-color: #ccc;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            margin: 0 auto;
-            margin-bottom: 20px;
+            background-size: cover;
+            background-position: center;
+            margin: 0 auto 20px;
         }
 
-
+        /* Card Header */
         .card-header {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-
-        .card-body {
-            margin-bottom: 20px;
-        }
-
-
+        /* Card Body */
         .card-body p {
-            margin: 5px 0;
-            color: #888;
+            margin: 10px 0;
+            color: #555;
         }
 
-
+        /* Buttons */
         .buttons {
             display: flex;
             justify-content: space-between;
+            margin-top: 20px;
         }
-
 
         .button {
             font-size: 2rem;
-            padding: 10px;
+            padding: 15px;
             cursor: pointer;
+            border: none;
+            border-radius: 50%;
             transition: transform 0.2s ease;
         }
 
-
         .button:hover {
-            transform: scale(1.2);
+            transform: scale(1.1);
         }
-
 
         .check {
-            color: green;
+            background-color: #28a745;
+            color: white;
         }
-
 
         .x {
-            color: red;
+            background-color: #dc3545;
+            color: white;
         }
 
-
+        /* Transition and Animation */
         .card-move-left {
             transform: translateX(-500px);
             opacity: 0;
         }
-
 
         .card-move-right {
             transform: translateX(500px);
             opacity: 0;
         }
     </style>
+</head>
+<body>
+
     <div class="container">
+        <h1>Music Match</h1>
         <div id="card" class="card">
-            <div class="profile-img"></div>
-            <div class="card-header">User: Alex</div>
+            <div class="profile-img" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Radiohead_-_2012_%28Portrait%29.jpg/800px-Radiohead_-_2012_%28Portrait%29.jpg');"></div>
+            <div class="card-header">User: Radiohead</div>
             <div class="card-body">
                 <p><strong>Music Genre:</strong> Rock</p>
                 <p><strong>Favorite Artist:</strong> Radiohead</p>
@@ -130,97 +143,130 @@ permalink: /melodymates/profile_matching.html/
                 <p><strong>Listening Time:</strong> 4:07</p>
             </div>
             <div class="buttons">
-                <span id="reject" class="button x">❌</span>
-                <span id="approve" class="button check">✅</span>
+                <button id="reject" class="button x">❌</button>
+                <button id="approve" class="button check">✅</button>
             </div>
         </div>
     </div>
 
-
     <script>
-        const approveButton = document.getElementById('approve');
-        const rejectButton = document.getElementById('reject');
         const container = document.querySelector('.container');
+        let currentCard = document.getElementById('card');
+        const artists = [
+            {
+                name: 'Radiohead',
+                genre: 'Rock',
+                artist: 'Radiohead',
+                song: 'Black Star',
+                time: '4:07',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Radiohead_-_2012_%28Portrait%29.jpg/800px-Radiohead_-_2012_%28Portrait%29.jpg'
+            },
+            {
+                name: 'Lauryn Hill',
+                genre: 'R&B',
+                artist: 'Ms. Lauryn Hill',
+                song: 'Ex-Factor',
+                time: '5:26',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Lauryn_Hill_2018.jpg/1024px-Lauryn_Hill_2018.jpg'
+            },
+            {
+                name: 'Billie Eilish',
+                genre: 'Pop',
+                artist: 'Billie Eilish',
+                song: 'Bad Guy',
+                time: '3:14',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Billie_Eilish_2020.jpg'
+            },
+            {
+                name: 'Travis Scott',
+                genre: 'Hip-Hop',
+                artist: 'Travis Scott',
+                song: 'SICKO MODE',
+                time: '5:12',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/Travis_Scott_2019.jpg'
+            },
+            {
+                name: 'Ariana Grande',
+                genre: 'Pop',
+                artist: 'Ariana Grande',
+                song: 'No Tears Left to Cry',
+                time: '3:26',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Ariana_Grande_2018.jpg'
+            }
+        ];
 
+        let currentIndex = 0;
 
+        // Function to create new card with dynamic data
         const createNewCard = () => {
+            const artist = artists[currentIndex];
+
             const newCard = document.createElement('div');
             newCard.classList.add('card');
             newCard.innerHTML = `
-                <div class="profile-img"></div>
-                <div class="card-header">User: Placeholder</div>
+                <div class="profile-img" style="background-image: url('${artist.img}');"></div>
+                <div class="card-header">User: ${artist.name}</div>
                 <div class="card-body">
-                    <p><strong>Music Genre:</strong> R&B</p>
-                    <p><strong>Favorite Artist:</strong> Ms. Lauryn Hill </p>
-                    <p><strong>Top Song:</strong> Ex-Factor </p>
-                    <p><strong>Listening Time:</strong> 5:26 </p>
+                    <p><strong>Music Genre:</strong> ${artist.genre}</p>
+                    <p><strong>Favorite Artist:</strong> ${artist.artist}</p>
+                    <p><strong>Top Song:</strong> ${artist.song}</p>
+                    <p><strong>Listening Time:</strong> ${artist.time}</p>
                 </div>
                 <div class="buttons">
-                    <span class="button x">❌</span>
-                    <span class="button check">✅</span>
+                    <button class="button x">❌</button>
+                    <button class="button check">✅</button>
                 </div>
             `;
+
             container.appendChild(newCard);
 
+            // Add event listeners for new card buttons
+            const approveButton = newCard.querySelector('.check');
+            const rejectButton = newCard.querySelector('.x');
 
-            const newApproveButton = newCard.querySelector('.check');
-            const newRejectButton = newCard.querySelector('.x');
-
-
-            newApproveButton.addEventListener('click', () => {
+            approveButton.addEventListener('click', () => {
                 moveCard(newCard, 'right');
+                sendDecision(artist.name, 'approved');
             });
 
-
-            newRejectButton.addEventListener('click', () => {
+            rejectButton.addEventListener('click', () => {
                 moveCard(newCard, 'left');
+                sendDecision(artist.name, 'rejected');
             });
-        }
 
+            // Update index for the next card
+            currentIndex = (currentIndex + 1) % artists.length;
+        };
 
+        // Function to move card left or right
         const moveCard = (cardElement, direction) => {
             cardElement.classList.add(`card-move-${direction}`);
             setTimeout(() => {
                 cardElement.classList.remove(`card-move-${direction}`);
-                createNewCard();
-                container.removeChild(cardElement);
+                createNewCard();  // Create a new card
+                container.removeChild(cardElement);  // Remove the old card
             }, 300);
-        }
+        };
 
-
-        approveButton.addEventListener('click', () => {
-            moveCard(card, 'right');
-        });
-
-
-        rejectButton.addEventListener('click', () => {
-            moveCard(card, 'left');
-        });
-    </script>
-
-
-    <script>
-        // Send decision to the backend API
+        // Function to send decision to the backend
         async function sendDecision(username, decision) {
-            const response = await fetch('http://127.0.0.1:5000/api/user-status', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: username, decision: decision })
-            });
-
-
-            const result = await response.json();
-            console.log("Decision sent:", result);
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/data/Rhea', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: username, decision: decision })
+                });
+                const result = await response.json();
+                console.log("Decision sent:", result);
+            } catch (error) {
+                console.error('Error sending decision:', error);
+            }
         }
 
-
-        document.getElementById("approve").addEventListener("click", () => {
-            sendDecision("Alex", "approved");
-        });
-
-
-        document.getElementById("reject").addEventListener("click", () => {
-            sendDecision("Alex", "rejected");
-        });
+        // Initial call to load the first card
+        createNewCard();
     </script>
+
+</body>
 </html>
+
