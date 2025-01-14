@@ -6,10 +6,12 @@ permalink: /melodymates/profile_matching.html/
 ---
 
 
+
+
 <html lang="en">
 
 
-<head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Match</title>
@@ -26,6 +28,7 @@ permalink: /melodymates/profile_matching.html/
             color: #333;
         }
 
+
         .container {
             position: relative;
             width: 600px;
@@ -37,6 +40,7 @@ permalink: /melodymates/profile_matching.html/
             padding: 20px;
         }
 
+
         /* Header Styles */
         h1 {
             font-size: 2.5rem;
@@ -44,6 +48,7 @@ permalink: /melodymates/profile_matching.html/
             margin-bottom: 30px;
             color: #333;
         }
+
 
         /* Card Styles */
         .card {
@@ -63,6 +68,7 @@ permalink: /melodymates/profile_matching.html/
             z-index: 1;
         }
 
+
         /* Profile Image Styles */
         .profile-img {
             width: 120px;
@@ -73,6 +79,7 @@ permalink: /melodymates/profile_matching.html/
             margin: 0 auto 20px;
         }
 
+
         /* Card Header */
         .card-header {
             font-size: 1.8rem;
@@ -81,11 +88,13 @@ permalink: /melodymates/profile_matching.html/
             margin-bottom: 15px;
         }
 
+
         /* Card Body */
         .card-body p {
             margin: 10px 0;
             color: #555;
         }
+
 
         /* Buttons */
         .buttons {
@@ -93,6 +102,7 @@ permalink: /melodymates/profile_matching.html/
             justify-content: space-between;
             margin-top: 20px;
         }
+
 
         .button {
             font-size: 2rem;
@@ -103,19 +113,23 @@ permalink: /melodymates/profile_matching.html/
             transition: transform 0.2s ease;
         }
 
+
         .button:hover {
             transform: scale(1.1);
         }
+
 
         .check {
             background-color: #28a745;
             color: white;
         }
 
+
         .x {
             background-color: #dc3545;
             color: white;
         }
+
 
         /* Transition and Animation */
         .card-move-left {
@@ -123,13 +137,18 @@ permalink: /melodymates/profile_matching.html/
             opacity: 0;
         }
 
+
         .card-move-right {
             transform: translateX(500px);
             opacity: 0;
         }
     </style>
-</head>
+
+
+
+
 <body>
+
 
     <div class="container">
         <h1>Music Match</h1>
@@ -148,6 +167,7 @@ permalink: /melodymates/profile_matching.html/
             </div>
         </div>
     </div>
+
 
     <script>
         const container = document.querySelector('.container');
@@ -191,15 +211,18 @@ permalink: /melodymates/profile_matching.html/
                 artist: 'Ariana Grande',
                 song: 'No Tears Left to Cry',
                 time: '3:26',
-                img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTl7KN9yLJKY9hR3crnrNEbd3sRr00kz_nFA&s'
+                img: 'https://upload.wihttps://nbhap.com/wp-content/uploads//2018/04/ariana-grande-no-tears-left-to-cry-stream-download-song-single-738x600.pngkimedia.org/wikipedia/commons/9/9d/Ariana_Grande_2018.jpg'
             }
         ];
 
+
         let currentIndex = 0;
+
 
         // Function to create new card with dynamic data
         const createNewCard = () => {
             const artist = artists[currentIndex];
+
 
             const newCard = document.createElement('div');
             newCard.classList.add('card');
@@ -218,25 +241,31 @@ permalink: /melodymates/profile_matching.html/
                 </div>
             `;
 
+
             container.appendChild(newCard);
+
 
             // Add event listeners for new card buttons
             const approveButton = newCard.querySelector('.check');
             const rejectButton = newCard.querySelector('.x');
+
 
             approveButton.addEventListener('click', () => {
                 moveCard(newCard, 'right');
                 sendDecision(artist.name, 'approved');
             });
 
+
             rejectButton.addEventListener('click', () => {
                 moveCard(newCard, 'left');
                 sendDecision(artist.name, 'rejected');
             });
 
+
             // Update index for the next card
             currentIndex = (currentIndex + 1) % artists.length;
         };
+
 
         // Function to move card left or right
         const moveCard = (cardElement, direction) => {
@@ -248,10 +277,11 @@ permalink: /melodymates/profile_matching.html/
             }, 300);
         };
 
+
         // Function to send decision to the backend
         async function sendDecision(username, decision) {
             try {
-                const response = await fetch('http://127.0.0.1:5000/api/data/Rhea', {
+                const response = await fetch(`http://127.0.0.1:5000/api/data/${username}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: username, decision: decision })
@@ -263,10 +293,107 @@ permalink: /melodymates/profile_matching.html/
             }
         }
 
+
         // Initial call to load the first card
         createNewCard();
     </script>
 
+
 </body>
 </html>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Examples</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #4682B4;
+        }
+        .user-buttons {
+            margin: 10px 0;
+        }
+        .user-buttons button {
+            margin: 5px;
+            padding: 10px 15px;
+            background-color: #4682B4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .user-buttons button:hover {
+            background-color: #5A9BD4;
+        }
+        #user-data {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Examples</h1>
+    <div class="user-buttons">
+        <!-- Buttons for each user -->
+        <button onclick="fetchUserData('Hannah')">Hannah</button>
+        <button onclick="fetchUserData('Rhea')">Rhea</button>
+        <button onclick="fetchUserData('Gaheera')">Gaheera</button>
+        <button onclick="fetchUserData('Carson')">Carson</button>
+        <button onclick="fetchUserData('Rowan')">Rowan</button>
+        <button onclick="fetchUserData('Brandon')">Brandon</button>
+    </div>
+    <div id="user-data">
+        <!-- User data will be displayed here -->
+    </div>
+    <script>
+        // Replace with your backend link and port
+        const BASE_URL = "http://127.0.0.1:8887/api/data";
+        // Function to fetch user data
+        async function fetchUserData(userName) {
+            try {
+                const response = await fetch(`${BASE_URL}/${userName}`);
+                if (!response.ok) {
+                    throw new Error("User data not found");
+                }
+                const data = await response.json();
+                displayUserData(userName, data);
+            } catch (error) {
+                document.getElementById("user-data").innerHTML = `
+                    <p style="color: red;">Error fetching data for ${userName}: ${error.message}</p>
+                `;
+            }
+        }
+        // Function to display user data in the HTML
+        function displayUserData(userName, data) {
+            const dataDiv = document.getElementById("user-data");
+            let userDataHTML = `<h2>Data for ${userName}</h2><ul>`;
+            for (const [key, value] of Object.entries(data)) {
+                userDataHTML += `<li>${key}: ${value}</li>`;
+            }
+            userDataHTML += `</ul>`;
+            dataDiv.innerHTML = userDataHTML;
+        }
+    </script>
+</body>
+</html>
