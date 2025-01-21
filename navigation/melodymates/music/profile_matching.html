@@ -281,7 +281,7 @@ permalink: /melodymates/profile_matching.html/
         // Function to send decision to the backend
         async function sendDecision(username, decision) {
             try {
-                const response = await fetch(`http://127.0.0.1:5000/api/data/${username}`, {
+                const response = await fetch(`http://127.0.0.1:5000/api/match/${username}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: username, decision: decision })
@@ -320,7 +320,6 @@ permalink: /melodymates/profile_matching.html/
 
 
 <html lang="en">
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Examples</title>
@@ -329,71 +328,105 @@ permalink: /melodymates/profile_matching.html/
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        h1 {
-            color: #4682B4;
+        .button-container {
+            margin-bottom: 20px;
         }
-        .user-buttons {
-            margin: 10px 0;
-        }
-        .user-buttons button {
+        button {
             margin: 5px;
             padding: 10px 15px;
-            background-color: #4682B4;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+            font-size: 16px;
         }
-        .user-buttons button:hover {
-            background-color: #5A9BD4;
-        }
-        #user-data {
+        table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 20px;
         }
-    </style>
-</head>
-<body>
-    <h1>Admin Examples</h1>
-    <div class="user-buttons">
-        <!-- Buttons for each user -->
-        <button onclick="fetchUserData('Hannah')">Hannah</button>
-        <button onclick="fetchUserData('Rhea')">Rhea</button>
-        <button onclick="fetchUserData('Gaheera')">Gaheera</button>
-        <button onclick="fetchUserData('Carson')">Carson</button>
-        <button onclick="fetchUserData('Rowan')">Rowan</button>
-        <button onclick="fetchUserData('Brandon')">Brandon</button>
-    </div>
-    <div id="user-data">
-        <!-- User data will be displayed here -->
-    </div>
-    <script>
-        // Replace with your backend link and port
-        const BASE_URL = "http://127.0.0.1:8887/api/data";
-        // Function to fetch user data
-        async function fetchUserData(userName) {
-            try {
-                const response = await fetch(`${BASE_URL}/${userName}`);
-                if (!response.ok) {
-                    throw new Error("User data not found");
-                }
-                const data = await response.json();
-                displayUserData(userName, data);
-            } catch (error) {
-                document.getElementById("user-data").innerHTML = `
-                    <p style="color: red;">Error fetching data for ${userName}: ${error.message}</p>
-                `;
-            }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
         }
-        // Function to display user data in the HTML
-        function displayUserData(userName, data) {
-            const dataDiv = document.getElementById("user-data");
-            let userDataHTML = `<h2>Data for ${userName}</h2><ul>`;
-            for (const [key, value] of Object.entries(data)) {
-                userDataHTML += `<li>${key}: ${value}</li>`;
+        th {
+            background-color: #f2f2f2;
+        }
+        .user-info {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            max-width: 800px;
+            color: black;
+        }
+    </style>
+
+    <h1>Admin Examples</h1>
+    <div class="button-container">
+        <button onclick="fetchUser('Hannah')">Hannah</button>
+        <button onclick="fetchUser('Rhea')">Rhea</button>
+        <button onclick="fetchUser('Gaheera')">Gaheera</button>
+        <button onclick="fetchUser('Carson')">Carson</button>
+        <button onclick="fetchUser('Rowan')">Rowan</button>
+        <button onclick="fetchUser('Brandon')">Brandon</button>
+    </div>
+
+    <div id="user-info" class="user-info">
+        <!-- User info will be displayed here -->
+    </div>
+
+    <table id="user-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Preferred Artist</th>
+                <th>Listening Method</th>
+                <th>New Music Source</th>
+                <th>Listening Frequency</th>
+                <th>Favorite Era</th>
+                <th>Favorite Aspect</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        const apiUrl = 'http://127.0.0.1:5004/api/user'; // Backend URL
+
+        // Function to fetch user data from backend
+        async function fetchUser(name) {
+            const response = await fetch(`${apiUrl}/${name}`);
+            const userInfoDiv = document.getElementById('user-info');
+            const userTable = document.getElementById('user-table').getElementsByTagName('tbody')[0];
+
+            // Clear previous content
+            userInfoDiv.innerHTML = '';
+            userTable.innerHTML = '';
+
+            if (response.ok) {
+                const data = await response.json();
+
+                // Display user data in a table
+                let row = userTable.insertRow();
+                row.insertCell(0).textContent = name;
+                row.insertCell(1).textContent = data.FavoriteArtists || 'N/A';
+                row.insertCell(2).textContent = data.ArtistRecommendation || 'N/A';
+                row.insertCell(3).textContent = data.TopSong || 'N/A';
+                row.insertCell(4).textContent = data.ListeningTime || 'N/A';
+                row.insertCell(5).textContent = data.ListeningTime || 'N/A'; // For now, add placeholder for new data
+                row.insertCell(6).textContent = data.ListeningTime || 'N/A'; // Add more details
+
+                // Show user profile info below the table
+                userInfoDiv.innerHTML = `
+                    <h2>${name}'s Information</h2>
+                    <p><strong>Preferred Artist:</strong> ${data.FavoriteArtists}</p>
+                    <p><strong>Artist Recommendation:</strong> ${data.ArtistRecommendation}</p>
+                    <p><strong>Top Song:</strong> ${data.TopSong}</p>
+                    <p><strong>Listening Time:</strong> ${data.ListeningTime}</p>
+                `;
+            } else {
+                userInfoDiv.innerHTML = `<p>Error: Could not fetch data for ${name}.</p>`;
             }
-            userDataHTML += `</ul>`;
-            dataDiv.innerHTML = userDataHTML;
         }
     </script>
-</body>
 </html>
