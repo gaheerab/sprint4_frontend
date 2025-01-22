@@ -13,6 +13,7 @@ permalink: /melodymates/profile_building.html/
         margin: 0;
         padding: 0;
     }
+
     .container {
         max-width: 1200px;
         margin: 50px auto;
@@ -21,14 +22,17 @@ permalink: /melodymates/profile_building.html/
         border-radius: 15px;
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     }
+
     h1 {
         text-align: center;
         color: #333;
         font-size: 2.5em;
     }
+
     .section {
         margin-bottom: 40px;
     }
+
     .question-card {
         background-color: #1f1f1f;
         color: #fff;
@@ -39,96 +43,46 @@ permalink: /melodymates/profile_building.html/
         flex-direction: column;
         align-items: flex-start;
     }
+
     .question-card h2 {
         font-size: 1.5em;
         margin-bottom: 15px;
     }
+
     .options {
         display: flex;
         flex-wrap: wrap;
         gap: 15px;
     }
+
     .option {
         background-color: #333;
         padding: 10px 20px;
         border-radius: 8px;
         color: #fff;
         cursor: pointer;
-        transition: background-color 0.3s;
+        transition: background-color 0.3s, transform 0.2s;
     }
+
     .option:hover {
         background-color: #555;
+        transform: scale(1.05);
     }
+
     .option.selected {
         background-color: #fbbc04;
         color: #333;
     }
+
     .checkmark {
         display: none;
         color: #28a745;
         font-size: 1.5em;
         margin-left: 10px;
     }
+
     .option.selected .checkmark {
         display: inline;
-    }
-
-    /* Album rating system */
-    .album-rating {
-        display: flex;
-        justify-content: space-around;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-    .album {
-        background-color: #1f1f1f;
-        color: #fff;
-        border-radius: 10px;
-        padding: 20px;
-        width: 200px;
-        text-align: center;
-    }
-    .album h3 {
-        font-size: 1.5em;
-        margin-bottom: 10px;
-    }
-    .stars {
-        display: flex;
-        justify-content: center;
-        gap: 5px;
-        cursor: pointer;
-    }
-    .star {
-        width: 30px;
-        height: 30px;
-        border: 2px solid #fbbc04;
-        border-radius: 50%;
-        background-color: transparent;
-        transition: background-color 0.3s;
-    }
-    .star.filled {
-        background-color: #fbbc04;
-    }
-    .star:hover {
-        background-color: #f7bb3f;
-    }
-
-    /* Submit button style */
-    .submit-button {
-        display: block;
-        width: 200px;
-        padding: 10px;
-        margin: 20px auto;
-        background-color: #fbbc04;
-        color: #333;
-        text-align: center;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 1.2em;
-        transition: background-color 0.3s;
-    }
-    .submit-button:hover {
-        background-color: #f7bb3f;
     }
 </style>
 
@@ -139,17 +93,19 @@ permalink: /melodymates/profile_building.html/
     <div class="section">
         <h2>Profile Quiz</h2>
 
+        <!-- Question 1 -->
         <div class="question-card" id="question1">
             <h2>Choose your favorite artist of these options:</h2>
             <div class="options">
-                <div class="option" data-answer="Adele">Travis Scott <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Travis Scott">Travis Scott <span class="checkmark">✔️</span></div>
                 <div class="option" data-answer="Drake">Drake <span class="checkmark">✔️</span></div>
                 <div class="option" data-answer="Taylor Swift">Taylor Swift <span class="checkmark">✔️</span></div>
-                <div class="option" data-answer="Ed Sheeran">SZA <span class="checkmark">✔️</span></div>
-                <div class="option" data-answer="Beyoncé">Frank Ocean <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="SZA">SZA <span class="checkmark">✔️</span></div>
+                <div class="option" data-answer="Frank Ocean">Frank Ocean <span class="checkmark">✔️</span></div>
             </div>
         </div>
 
+        <!-- Question 2 -->
         <div class="question-card" id="question2">
             <h2>Choose your music platform of choice:</h2>
             <div class="options">
@@ -161,6 +117,7 @@ permalink: /melodymates/profile_building.html/
             </div>
         </div>
 
+        <!-- Question 3 -->
         <div class="question-card" id="question3">
             <h2>How do you primarily learn about new music?</h2>
             <div class="options">
@@ -172,6 +129,7 @@ permalink: /melodymates/profile_building.html/
             </div>
         </div>
 
+        <!-- Question 4 -->
         <div class="question-card" id="question4">
             <h2>How often do you listen to music?</h2>
             <div class="options">
@@ -183,6 +141,7 @@ permalink: /melodymates/profile_building.html/
             </div>
         </div>
 
+        <!-- Question 5 -->
         <div class="question-card" id="question5">
             <h2>Which describes your favorite era of music?</h2>
             <div class="options">
@@ -195,6 +154,7 @@ permalink: /melodymates/profile_building.html/
             </div>
         </div>
 
+        <!-- Question 6 -->
         <div class="question-card" id="question6">
             <h2>What is the most important aspect of a song for you?</h2>
             <div class="options">
@@ -206,16 +166,26 @@ permalink: /melodymates/profile_building.html/
             </div>
         </div>
     </div>
+</div>
+
+<script>
+    // Add click event listeners to all options
+    document.querySelectorAll(".options").forEach((optionsContainer) => {
+        optionsContainer.addEventListener("click", (event) => {
+            const option = event.target.closest(".option");
+            if (option) {
+                // Deselect all options in the group
+                optionsContainer.querySelectorAll(".option").forEach((opt) => opt.classList.remove("selected"));
+
+                // Select the clicked option
+                option.classList.add("selected");
+            }
+        });
+    });
+</script>
 
 
-
-
-
-
-
-
-
-
+    
 
 <html lang="en">
     <meta charset="UTF-8">
