@@ -24,7 +24,8 @@ permalink: /melodymates/artist-recommendation.html/
   </style>
 </head>
 <body>
-  <h1>Manage Artist Information</h1>
+  <h1>Artist Recommendation</h1>
+  <h2>User Input</h2>
 
   <!-- Form for adding/updating users -->
   <form id="userForm">
@@ -34,19 +35,20 @@ permalink: /melodymates/artist-recommendation.html/
     <label for="uid">UID:</label>
     <input type="text" id="uid" required><br><br>
 
-    <label for="favorites">Favorite Artists (comma-separated):</label>
+    <label for="favorites">Favorite Artist(s) (comma-separated):</label>
     <input type="text" id="favorites" required><br><br>
 
     <button type="submit">Submit</button>
   </form>
 
-  <h2>Users List</h2>
+  <h2>User Information</h2>
   <table id="userTable">
     <thead>
       <tr>
         <th>Name</th>
         <th>UID</th>
         <th>Favorite Artists</th>
+        <th>Reccomended Artists</th>
         <th>Actions</th>
       </tr>
     </thead>
