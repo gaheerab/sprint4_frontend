@@ -1,5 +1,5 @@
 ---
-layout: base 
+layout: base
 title: Chat Room
 search_exclude: true
 permalink: /melodymates/chat_room.html/
@@ -9,177 +9,168 @@ permalink: /melodymates/chat_room.html/
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Chat</title>
+    <title>Music Chatroom</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #e0f7ff; /* Light blue background */
-            color: black;
-        }
-        #chat-container {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            justify-content: center;
+        }
+        .chat-container {
+            width: 90%;
             max-width: 800px;
-            margin: 20px auto;
-            border: 1px solid #1c4c90;
+            height: 80%;
+            background-color: #fff;
             border-radius: 8px;
-            background: #010a47;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        #user-select, #chat-box {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-        #chat-messages {
-            height: 300px;
+        .message-list {
+            max-height: 70%;
             overflow-y: auto;
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            padding-right: 10px;
         }
         .message {
-            margin-bottom: 10px;
+            padding: 12px;
+            margin-bottom: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            color: #333;
         }
-        .message span {
+        .message-user {
             font-weight: bold;
+            color: #444;
         }
-        #chat-form {
+        .message-text {
+            margin-top: 5px;
+        }
+        .send-message {
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            gap: 15px;
         }
-        #chat-form input, #chat-form button {
-            padding: 10px;
-            border: 1px solid hsl(249, 82%, 75%);
-            border-radius: 4px;
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            max-width: 200px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            color: #333;
         }
-        #chat-form button {
-            background-color: #007BFF;
+        button {
+            padding: 12px 18px;
+            background-color: #4CAF50;
             color: white;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 1rem;
         }
-        #chat-form button:hover {
-            background-color: #0056b3;
-        }
-        #user-dropdown {
-            margin-bottom: 20px;
+        button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <div id="chat-container">
-        <div id="user-select">
-            <h3>Select a User to Chat With</h3>
-            <select id="user-dropdown">
-                <option value="" disabled selected>Select a user</option>
-            </select>
-        </div>
-        <div id="chat-box">
-            <h3>Chat with <span id="chatting-with">No one</span></h3>
-            <div id="chat-messages"></div>
-            <form id="chat-form">
-                <input type="text" id="chat-input" placeholder="Type a message..." required>
-                <button type="submit">Send</button>
-            </form>
-        </div>
+
+<div class="chat-container">
+    <h2>Music Chatroom</h2>
+
+    <div class="message-list" id="message-list"></div>
+
+    <div class="send-message">
+        <input type="number" id="user-id-input" placeholder="Your User ID">
+        <input type="text" id="message-input" placeholder="Type your message...">
+        <button onclick="sendMessage()">Send</button>
     </div>
+</div>
 
-    <script>
-        const apiBase = 'http://127.0.0.1:5001/api';
-        const currentUser = 'rowangs'; // Example username, replace with actual logged-in user
-        let chattingWith = null;
+<script>
+    const API_BASE_URL = 'http://127.0.0.1:8887/api/music_chat';
 
-        // Fetch active users and populate dropdown
-        async function fetchUsers() {
-            try {
-                const response = await fetch(`${apiBase}/users`);
-                const users = await response.json();
-                populateUserDropdown(users);
-            } catch (error) {
-                console.error('Error fetching users:', error);
-            }
-        }
+    // Function to fetch all chat messages
+    async function fetchMessages() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/chat`);
+            const chats = await response.json();
 
-        // Populate the dropdown with users
-        function populateUserDropdown(users) {
-            const userDropdown = document.getElementById('user-dropdown');
-            userDropdown.innerHTML = '<option value="" disabled selected>Select a user</option>';
-            users.forEach(user => {
-                if (user !== currentUser) {
-                    const option = document.createElement('option');
-                    option.value = user;
-                    option.textContent = user;
-                    userDropdown.appendChild(option);
-                }
+            const messageList = document.getElementById('message-list');
+            messageList.innerHTML = ''; // Clear existing messages
+
+            chats.forEach(chat => {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+
+                const userElement = document.createElement('div');
+                userElement.classList.add('message-user');
+                userElement.textContent = `User ${chat.user_id}:`;
+
+                const messageText = document.createElement('div');
+                messageText.classList.add('message-text');
+                messageText.textContent = chat.message;
+
+                messageElement.appendChild(userElement);
+                messageElement.appendChild(messageText);
+                messageList.appendChild(messageElement);
             });
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    }
+
+    // Function to send a new chat message
+    async function sendMessage() {
+        const userIdInput = document.getElementById('user-id-input');
+        const messageInput = document.getElementById('message-input');
+        const userId = userIdInput.value.trim();
+        const message = messageInput.value.trim();
+
+        if (!userId || !message) {
+            alert('Both User ID and Message are required.');
+            return;
         }
 
-        // Start chat when user is selected
-        document.getElementById('user-dropdown').addEventListener('change', (event) => {
-            chattingWith = event.target.value;
-            document.getElementById('chatting-with').textContent = chattingWith;
-            fetchChatHistory();
-        });
-
-        // Fetch chat history
-        async function fetchChatHistory() {
-            if (!chattingWith) return;
-            try {
-                const response = await fetch(`${apiBase}/chat/${currentUser}/${chattingWith}`);
-                const messages = await response.json();
-                renderChatMessages(messages);
-            } catch (error) {
-                console.error('Error fetching chat history:', error);
-            }
-        }
-
-        // Render chat messages
-        function renderChatMessages(messages) {
-            const chatMessagesDiv = document.getElementById('chat-messages');
-            chatMessagesDiv.innerHTML = '';
-            messages.forEach(msg => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message';
-                messageDiv.innerHTML = `<span>${msg.sender}:</span> ${msg.message}`;
-                chatMessagesDiv.appendChild(messageDiv);
+        try {
+            const response = await fetch(`${API_BASE_URL}/chat`, { //fetch command for sending a message
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ user_id: parseInt(userId, 10), message }),
             });
-            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
-        }
 
-        // Send a message
-        async function sendMessage(event) {
-            event.preventDefault();
-            if (!chattingWith) {
-                alert('Select a user to chat with.');
-                return;
+            if (response.ok) {
+                messageInput.value = ''; // Clear message input
+                fetchMessages(); // Refresh the chat list
+            } else {
+                const errorData = await response.json();
+                console.error('Error sending message:', errorData);
             }
-
-            const messageInput = document.getElementById('chat-input');
-            const message = messageInput.value;
-
-            try {
-                await fetch(`${apiBase}/chat`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        sender: currentUser,
-                        receiver: chattingWith,
-                        message: message,
-                    }),
-                });
-                messageInput.value = '';
-                fetchChatHistory();
-            } catch (error) {
-                console.error('Error sending message:', error);
-            }
+        } catch (error) {
+            console.error('Error sending message:', error);
         }
+    }
 
-        document.getElementById('chat-form').addEventListener('submit', sendMessage);
+    // Fetch messages when the page loads
+    fetchMessages();
 
-        // Fetch users on load
-        fetchUsers();
-    </script>
+    // Refresh messages every 5 seconds
+    setInterval(fetchMessages, 5000);
+</script>
+
 </body>
 </html>
