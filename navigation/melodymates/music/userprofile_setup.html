@@ -93,39 +93,34 @@ permalink: /melodymates/userprofile_setup.html/
             <label for="profilePicture">Profile Picture:</label>
             <input type="text" id="profilePicture" name="profilePicture" placeholder="Profile Picture URL" required>
 
-            <div class="checkbox-label">
+            <!-- <div class="checkbox-label">
                 <input type="checkbox" id="noPicture" name="no_picture" onchange="toggleProfilePicture()">
                 <label for="noPicture">I don’t want to use a profile picture</label>
-            </div>
+            </div> -->
 
             <button type="submit">Create Profile</button>
         </form>
     </div>
 
     <script>
-        import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
-
-        function toggleProfilePicture() {
-            const profilePictureInput = document.getElementById('profilePicture');
-            const noPictureCheckbox = document.getElementById('noPicture');
-            profilePictureInput.disabled = noPictureCheckbox.checked;
-        }
+        // import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
 
         // Sample fetch request for creating a new public profile
         const createProfile = async (name, artists, bio, profilePicture) => {
-            const url = `${pythonURI}/api/profileAuthenticate`; // Replace with your actual API endpoint
+            const url = `http://127.0.0.1:8887/api/profile`; // Replace with your actual API endpoint
         
             const data = {
                 name: name, // Replace with the desired name
                 uid: name,     // Replace with the desired user ID
                 pfp: profilePicture, // Optional profile picture URL
                 bio: bio,      // Optional bio
-                favorite_artist: artists           // Optional favorite artist
+                favorite_artist: artists     // Optional favorite artist
             };
         
             try {
             const response = await fetch(url, {
                 method: "POST",
+                mode: "cors",
                 headers: {
                 "Content-Type": "application/json"
                 },
@@ -136,7 +131,7 @@ permalink: /melodymates/userprofile_setup.html/
                 // Handle errors based on response status
                 const errorData = await response.json();
                 console.error("Error:", errorData.message);
-                alert(`Error: ${errorData.message}`);
+                // alert(`Error: ${errorData.message}`);
             } else {
                 // Handle success
                 const result = await response.json();
@@ -145,21 +140,25 @@ permalink: /melodymates/userprofile_setup.html/
             }
             } catch (error) {
             console.error("Fetch error:", error);
-            alert("An error occurred while creating the profile.");
+            // alert("An error occurred while creating the profile.");
             }
         };
 
         // Sample fetch request for user authentication and JWT generation
         const authenticateUser = async (name) => {
-            const url = `${pythonURI}/api/profileAuthenticate`; // Replace with your actual API endpoint
+//            const url = `${pythonURI}/api/profileAuthenticate`; // Replace with your actual API endpoint
+            const url = `http://127.0.0.1:8887/api/profileAuthenticate`; // Replace with your actual API endpoint
+
         
             const data = {
-                uid: "name",         // Replace with the user ID
+                uid: name,         // Replace with the user ID
+                password: "password"
             };
         
             try {
             const response = await fetch(url, {
                 method: "POST",
+                mode: "cors",
                 headers: {
                 "Content-Type": "application/json"
                 },
@@ -171,7 +170,7 @@ permalink: /melodymates/userprofile_setup.html/
                 // Handle errors based on response status
                 const errorData = await response.json();
                 console.error("Error:", errorData.message);
-                alert(`Error: ${errorData.message}`);
+                // alert(`Error: ${errorData.message}`);
             } else {
                 // Handle success
                 const result = await response.text(); // Get the success response as text
@@ -180,7 +179,7 @@ permalink: /melodymates/userprofile_setup.html/
             }
             } catch (error) {
             console.error("Fetch error:", error);
-            alert("An error occurred during authentication.");
+            // alert("An error occurred during authentication.");
             }
         };
         
@@ -201,22 +200,24 @@ permalink: /melodymates/userprofile_setup.html/
 
             // Collect form data
             const name = document.getElementById('name').value;
-            const artists = document.getElementById('artists').value.split(',').map(a => a.trim());
-            const profilePicture = document.getElementById('profilePicture').files[0];
+            const artists = document.getElementById('artists').value;
+            const profilePicture = document.getElementById('profilePicture').value;
+
 
             // Save data (use this block if backend is available, else skip)
             console.log({
                 name,
                 bio,
                 artists,
-                profilePicture: profilePicture ? profilePicture.name : "No Picture"
+                profilePicture
             });
 
             createProfile(name, artists, bio, profilePicture);
-            authenticateUser(name, artists, bio, profilePicture);
+            authenticateUser(name);
 
             // Redirect to created profile page
             window.location.href = "{{ site.baseurl }}/melodymates/created_profile.html/";
+            return false
         }
     </script>
 </body>
