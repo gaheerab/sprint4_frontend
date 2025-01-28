@@ -1,17 +1,22 @@
 ---
-layout: base 
+layout: base
 title: Profile Matching
 search_exclude: true
 permalink: /melodymates/profile_matching.html/
 ---
 
+
+
+
 <html lang="en">
 
-<head>
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Match</title>
     <style>
+        /* General Styles */
         body {
             display: flex;
             justify-content: center;
@@ -19,23 +24,41 @@ permalink: /melodymates/profile_matching.html/
             height: 100vh;
             margin: 0;
             background-color: #f4f4f4;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            color: #333;
         }
+
 
         .container {
             position: relative;
-            width: 500px;
+            width: 600px;
             height: 700px;
             overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
         }
 
+
+        /* Header Styles */
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+
+        /* Card Styles */
         .card {
             position: absolute;
-            top: 52%;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 90%;
-            height: 500px;
+            width: 100%;
+            max-width: 500px;
+            height: 400px;
             background-color: #fff;
             padding: 20px;
             border-radius: 10px;
@@ -45,69 +68,93 @@ permalink: /melodymates/profile_matching.html/
             z-index: 1;
         }
 
+
+        /* Profile Image Styles */
         .profile-img {
-            width: 100px;
-            height: 100px;
-            background-color: #ccc;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            margin: 0 auto;
-            margin-bottom: 20px;
+            background-size: cover;
+            background-position: center;
+            margin: 0 auto 20px;
         }
 
+
+        /* Card Header */
         .card-header {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        .card-body {
-            margin-bottom: 20px;
-        }
 
+        /* Card Body */
         .card-body p {
-            margin: 5px 0;
-            color: #888;
+            margin: 10px 0;
+            color: #555;
         }
 
+
+        /* Buttons */
         .buttons {
             display: flex;
             justify-content: space-between;
+            margin-top: 20px;
         }
+
 
         .button {
             font-size: 2rem;
-            padding: 10px;
+            padding: 15px;
             cursor: pointer;
+            border: none;
+            border-radius: 50%;
             transition: transform 0.2s ease;
         }
 
+
         .button:hover {
-            transform: scale(1.2);
+            transform: scale(1.1);
         }
+
 
         .check {
-            color: green;
+            background-color: #28a745;
+            color: white;
         }
+
 
         .x {
-            color: red;
+            background-color: #dc3545;
+            color: white;
         }
 
+
+        /* Transition and Animation */
         .card-move-left {
             transform: translateX(-500px);
             opacity: 0;
         }
+
 
         .card-move-right {
             transform: translateX(500px);
             opacity: 0;
         }
     </style>
+
+
+
+
+<body>
+
+
     <div class="container">
+        <h1>Music Match</h1>
         <div id="card" class="card">
-            <div class="profile-img"></div>
-            <div class="card-header">User: Alex</div>
+            <div class="profile-img" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Radiohead_-_2012_%28Portrait%29.jpg/800px-Radiohead_-_2012_%28Portrait%29.jpg');"></div>
+            <div class="card-header">User: Radiohead</div>
             <div class="card-body">
                 <p><strong>Music Genre:</strong> Rock</p>
                 <p><strong>Favorite Artist:</strong> Radiohead</p>
@@ -115,85 +162,271 @@ permalink: /melodymates/profile_matching.html/
                 <p><strong>Listening Time:</strong> 4:07</p>
             </div>
             <div class="buttons">
-                <span id="reject" class="button x">❌</span>
-                <span id="approve" class="button check">✅</span>
+                <button id="reject" class="button x">❌</button>
+                <button id="approve" class="button check">✅</button>
             </div>
         </div>
     </div>
 
-    <script>
-        const approveButton = document.getElementById('approve');
-        const rejectButton = document.getElementById('reject');
-        const container = document.querySelector('.container');
 
+    <script>
+        const container = document.querySelector('.container');
+        let currentCard = document.getElementById('card');
+        const artists = [
+            {
+                name: 'Radiohead',
+                genre: 'Rock',
+                artist: 'Radiohead',
+                song: 'Black Star',
+                time: '4:07',
+                img: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/55/Radioheadthebends.png/220px-Radioheadthebends.png'
+            },
+            {
+                name: 'Lauryn Hill',
+                genre: 'R&B',
+                artist: 'Ms. Lauryn Hill',
+                song: 'Ex-Factor',
+                time: '5:26',
+                img: 'https://upload.wikimedia.org/wikipedia/en/9/99/The_Miseducation_of_Lauryn_Hill.png'
+            },
+            {
+                name: 'Billie Eilish',
+                genre: 'Pop',
+                artist: 'Billie Eilish',
+                song: 'Bad Guy',
+                time: '3:14',
+                img: 'https://i.scdn.co/image/ab67616d0000b27350a3147b4edd7701a876c6ce'
+            },
+            {
+                name: 'Travis Scott',
+                genre: 'Hip-Hop',
+                artist: 'Travis Scott',
+                song: 'SICKO MODE',
+                time: '5:12',
+                img: 'https://m.media-amazon.com/images/M/MV5BZTk3ZTIyNWYtNjU2Yy00YzI1LWExNDktYWM1NGU1ODFlZjcxXkEyXkFqcGc@._V1_QL75_UY190_CR74,0,190,190_.jpg'
+            },
+            {
+                name: 'Ariana Grande',
+                genre: 'Pop',
+                artist: 'Ariana Grande',
+                song: 'No Tears Left to Cry',
+                time: '3:26',
+                img: 'https://upload.wihttps://nbhap.com/wp-content/uploads//2018/04/ariana-grande-no-tears-left-to-cry-stream-download-song-single-738x600.pngkimedia.org/wikipedia/commons/9/9d/Ariana_Grande_2018.jpg'
+            }
+        ];
+
+
+        let currentIndex = 0;
+
+
+        // Function to create new card with dynamic data
         const createNewCard = () => {
+            const artist = artists[currentIndex];
+
+
             const newCard = document.createElement('div');
             newCard.classList.add('card');
             newCard.innerHTML = `
-                <div class="profile-img"></div>
-                <div class="card-header">User: Placeholder</div>
+                <div class="profile-img" style="background-image: url('${artist.img}');"></div>
+                <div class="card-header">User: ${artist.name}</div>
                 <div class="card-body">
-                    <p><strong>Music Genre:</strong> R&B</p>
-                    <p><strong>Favorite Artist:</strong> Ms. Lauryn Hill </p>
-                    <p><strong>Top Song:</strong> Ex-Factor </p>
-                    <p><strong>Listening Time:</strong> 5:26 </p>
+                    <p><strong>Music Genre:</strong> ${artist.genre}</p>
+                    <p><strong>Favorite Artist:</strong> ${artist.artist}</p>
+                    <p><strong>Top Song:</strong> ${artist.song}</p>
+                    <p><strong>Listening Time:</strong> ${artist.time}</p>
                 </div>
                 <div class="buttons">
-                    <span class="button x">❌</span>
-                    <span class="button check">✅</span>
+                    <button class="button x">❌</button>
+                    <button class="button check">✅</button>
                 </div>
             `;
+
+
             container.appendChild(newCard);
 
-            const newApproveButton = newCard.querySelector('.check');
-            const newRejectButton = newCard.querySelector('.x');
 
-            newApproveButton.addEventListener('click', () => {
+            // Add event listeners for new card buttons
+            const approveButton = newCard.querySelector('.check');
+            const rejectButton = newCard.querySelector('.x');
+
+
+            approveButton.addEventListener('click', () => {
                 moveCard(newCard, 'right');
+                sendDecision(artist.name, 'approved');
             });
 
-            newRejectButton.addEventListener('click', () => {
+
+            rejectButton.addEventListener('click', () => {
                 moveCard(newCard, 'left');
+                sendDecision(artist.name, 'rejected');
             });
-        }
 
+
+            // Update index for the next card
+            currentIndex = (currentIndex + 1) % artists.length;
+        };
+
+
+        // Function to move card left or right
         const moveCard = (cardElement, direction) => {
             cardElement.classList.add(`card-move-${direction}`);
             setTimeout(() => {
                 cardElement.classList.remove(`card-move-${direction}`);
-                createNewCard();
-                container.removeChild(cardElement);
+                createNewCard();  // Create a new card
+                container.removeChild(cardElement);  // Remove the old card
             }, 300);
+        };
+
+
+        // Function to send decision to the backend
+        async function sendDecision(username, decision) {
+            try {
+                const response = await fetch(`http://127.0.0.1:5000/api/match/${username}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: username, decision: decision })
+                });
+                const result = await response.json();
+                console.log("Decision sent:", result);
+            } catch (error) {
+                console.error('Error sending decision:', error);
+            }
         }
 
-        approveButton.addEventListener('click', () => {
-            moveCard(card, 'right');
-        });
 
-        rejectButton.addEventListener('click', () => {
-            moveCard(card, 'left');
-        });
+        // Initial call to load the first card
+        createNewCard();
     </script>
 
-    <script>
-        // Send decision to the backend API
-        async function sendDecision(username, decision) {
-            const response = await fetch('http://127.0.0.1:5000/api/user-status', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: username, decision: decision })
-            });
 
-            const result = await response.json();
-            console.log("Decision sent:", result);
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Examples</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
         }
+        .button-container {
+            margin-bottom: 20px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 15px;
+            font-size: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .user-info {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            max-width: 800px;
+            color: black;
+        }
+    </style>
 
-        document.getElementById("approve").addEventListener("click", () => {
-            sendDecision("Alex", "approved");
-        });
+    <h1>Admin Examples</h1>
+    <div class="button-container">
+        <button onclick="fetchUser('Hannah')">Hannah</button>
+        <button onclick="fetchUser('Rhea')">Rhea</button>
+        <button onclick="fetchUser('Gaheera')">Gaheera</button>
+        <button onclick="fetchUser('Carson')">Carson</button>
+        <button onclick="fetchUser('Rowan')">Rowan</button>
+        <button onclick="fetchUser('Brandon')">Brandon</button>
+    </div>
 
-        document.getElementById("reject").addEventListener("click", () => {
-            sendDecision("Alex", "rejected");
-        });
+    <div id="user-info" class="user-info">
+        <!-- User info will be displayed here -->
+    </div>
+
+    <table id="user-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Preferred Artist</th>
+                <th>Listening Method</th>
+                <th>New Music Source</th>
+                <th>Listening Frequency</th>
+                <th>Favorite Era</th>
+                <th>Favorite Aspect</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        const apiUrl = 'http://127.0.0.1:5004/api/user'; // Backend URL
+
+        // Function to fetch user data from backend
+        async function fetchUser(name) {
+            const response = await fetch(`${apiUrl}/${name}`);
+            const userInfoDiv = document.getElementById('user-info');
+            const userTable = document.getElementById('user-table').getElementsByTagName('tbody')[0];
+
+            // Clear previous content
+            userInfoDiv.innerHTML = '';
+            userTable.innerHTML = '';
+
+            if (response.ok) {
+                const data = await response.json();
+
+                // Display user data in a table
+                let row = userTable.insertRow();
+                row.insertCell(0).textContent = name;
+                row.insertCell(1).textContent = data.FavoriteArtists || 'N/A';
+                row.insertCell(2).textContent = data.ArtistRecommendation || 'N/A';
+                row.insertCell(3).textContent = data.TopSong || 'N/A';
+                row.insertCell(4).textContent = data.ListeningTime || 'N/A';
+                row.insertCell(5).textContent = data.ListeningTime || 'N/A'; // For now, add placeholder for new data
+                row.insertCell(6).textContent = data.ListeningTime || 'N/A'; // Add more details
+
+                // Show user profile info below the table
+                userInfoDiv.innerHTML = `
+                    <h2>${name}'s Information</h2>
+                    <p><strong>Preferred Artist:</strong> ${data.FavoriteArtists}</p>
+                    <p><strong>Artist Recommendation:</strong> ${data.ArtistRecommendation}</p>
+                    <p><strong>Top Song:</strong> ${data.TopSong}</p>
+                    <p><strong>Listening Time:</strong> ${data.ListeningTime}</p>
+                `;
+            } else {
+                userInfoDiv.innerHTML = `<p>Error: Could not fetch data for ${name}.</p>`;
+            }
+        }
     </script>
 </html>

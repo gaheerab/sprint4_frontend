@@ -5,78 +5,163 @@ search_exclude: true
 permalink: /melodymates/artist-recommendation.html/
 ---
 
-<h1>Your Artist Reccomendations</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArtInfo CRUD</title>
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Artist Recommendation</h1>
+  <h2>User Input</h2>
 
-<p>Your reccomended artists based on your music preferences!</p>
+  <!-- Form for adding/updating users -->
+  <form id="userForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" required><br><br>
 
-<!-- Head contains information to Support the Document -->
+    <label for="uid">Username:</label>
+    <input type="text" id="uid" required><br><br>
 
+    <label for="favorites">Favorite Artist(s) (comma-separated):</label>
+    <input type="text" id="favorites" required><br><br>
 
-<!-- HTML table fragment for page -->
-<table id="demo" class="table">
-  <thead>
+    <button type="submit">Submit</button>
+  </form>
+
+  <h2>User Information</h2>
+  <table id="userTable">
+    <thead>
       <tr>
-          <th>Username</th>
-          <th>Favorite Artists</th>
-          <th>Reccomended Artists</th>
+        <th>Name</th>
+        <th>Username</th>
+        <th>Favorite Artists</th>
+        <th>Actions</th>
+        <th>Reccomended Artists</th>
       </tr>
-  </thead>
-  <tbody id="result">
-    <!-- javascript generated data -->
-  </tbody>
-</table>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-<script>
-  // prepare HTML result container for new output
-  let resultContainer = document.getElementById("result");
-  
-  // prepare URL
-  url = "http://127.0.0.1:8887/api/user/Hannah";
+  <script>
+    let editingUserId = null;  // Track the user being edited
 
+    // Handle form submission for adding/updating users
+    document.getElementById('userForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      // Gather form data
+      const name = document.getElementById('name').value;
+      const uid = document.getElementById('uid').value;
+      const favorites = document.getElementById('favorites').value.split(',').map(item => item.trim());
 
-  // set options for cross origin header request
-  let options = {
-    method: 'GET', // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, *cors, same-origin
-    cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'include', // include, *same-origin, omit
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
+      const data = { name, uid, favorites };
 
-  // fetch the API
-  fetch(url, options)
-    // response is a RESTful "promise" on any successful fetch
-    .then(response => {
-      // check for response errors and display
-      if (response.status !== 200) {
-          console.error(response.status);
-          return;
+      if (editingUserId) {
+        // If editing, send PUT request
+        updateUser(data);
+      } else {
+        // If not editing, send POST request
+        createUser(data);
       }
-      console.log(response)
-      // valid response will contain json data
-      response.json().then(data => {
-          console.log(data);
-          // for (row of data) {
-            // tr and td build out for each row
-            const tr = document.createElement("tr");
-            const userName = document.createElement("td");
-            const favoriteArtist = document.createElement("td")
-            const artistReccomendation = document.createElement("td")
+    });
 
-            // data is specific to the API
-            userName.innerHTML = data.Username; 
-            favoriteArtist.innerHTML = data.FavoriteArtists;
-            artistReccomendation.innerHTML = data.ArtistReccomendation;
-            // this builds each td into tr
-            tr.appendChild(userName);
-            tr.appendChild(favoriteArtist);
-            tr.appendChild(artistReccomendation)
-            // add HTML to container
-            resultContainer.appendChild(tr);
-          }
-      )
-  })
-  
-</script>
+    // Create new user (POST request)
+    function createUser(data) {
+      fetch('http://localhost:8887/api/artinfo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      .then(response => response.json())
+      .then(() => {
+        loadUsers();  // Refresh the user list
+        resetForm();  // Reset form fields
+      });
+    }
+
+    // Update user (PUT request)
+    function updateUser(data) {
+      fetch('http://localhost:8887/api/artinfo', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, uid: editingUserId }),
+      })
+      .then(response => response.json())
+      .then(() => {
+        loadUsers();  // Refresh the user list
+        resetForm();  // Reset form fields and stop editing
+        editingUserId = null;  // Clear the editingUserId
+      });
+    }
+
+    // Reset form fields after submission
+    function resetForm() {
+      document.getElementById('name').value = '';
+      document.getElementById('uid').value = '';
+      document.getElementById('favorites').value = '';
+    }
+
+    // Fetch all users and populate the table
+    function loadUsers() {
+      fetch('http://localhost:8887/api/artinfo')
+        .then(response => response.json())
+        .then(data => {
+          const tableBody = document.getElementById('userTable').getElementsByTagName('tbody')[0];
+          tableBody.innerHTML = '';  // Clear table before adding new rows
+          data.forEach(user => {
+            const row = tableBody.insertRow();
+            row.innerHTML = `
+              <td>${user.name}</td>
+              <td>${user.uid}</td>
+              <td>${user.favorites.join(', ')}</td>
+              <td>
+                <button onclick="editUser('${user.uid}')">Update</button>
+                <button onclick="deleteUser('${user.uid}')">Delete</button>
+              </td>
+            `;
+          });
+        });
+    }
+
+    // Edit user and populate the form
+    function editUser(uid) {
+      fetch(`http://localhost:8887/api/artinfo?uid=${uid}`)
+        .then(response => response.json())
+        .then(user => {
+          document.getElementById('name').value = user.name;
+          document.getElementById('uid').value = user.uid;
+          document.getElementById('favorites').value = user.favorites.join(', ');
+          editingUserId = user.uid;  // Set the user ID to track during update
+        });
+    }
+
+    // Delete user
+    function deleteUser(uid) {
+      fetch('http://localhost:8887/api/artinfo', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uid }),
+      })
+      .then(() => {
+        loadUsers();  // Refresh the user list
+      });
+    }
+
+    // Initial load of users
+    loadUsers();
+  </script>
+</body>
+</html>

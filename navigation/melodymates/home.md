@@ -152,8 +152,6 @@ menu: nav/melodymates.html
        <a href="chat_room.html">Music Chatroom</a>
        <a href="artist-recommendation.html">Artist Recommendations</a>
        <a href="user-data.html">User Data</a>
-       <a href="song-voting.html">Song of the Day Voting</a>
-       <a href="reviews.html">Music Reviews</a>
        <a href="userprofile_setup.html">User Profile</a>
        <a href="profile_building.html">Build Music Profile</a>
        <a href="profile_matching.html">Matching</a>
@@ -183,24 +181,6 @@ menu: nav/melodymates.html
            <h2>Artist Recommendation</h2>
            <p>Get personalized music recommendations based on your favorite artists.</p>
            <button onclick="window.location.href='artist-recommendation.html'">Discover Artists</button>
-       </div>
-       <!-- User-Curated Playlists Section -->
-       <div class="section" id="user-playlists">
-           <h2>User-Curated Playlists</h2>
-           <p>Create, share, and explore playlists curated by students like you.</p>
-           <button onclick="window.location.href='user-playlists.html'">View Playlists</button>
-       </div>
-       <!-- Song of the Day Voting Section -->
-       <div class="section" id="song-voting">
-           <h2>Song of the Day Voting</h2>
-           <p>Vote for your favorite songs and help select the daily top pick.</p>
-           <button onclick="window.location.href='song-voting.html'">Vote Now</button>
-       </div>
-       <!-- Music Reviews Section -->
-       <div class="section" id="reviews">
-           <h2>Music Reviews</h2>
-           <p>Read and share reviews of albums, songs, and artists.</p>
-           <button onclick="window.location.href='reviews.html'">Explore Reviews</button>
        </div>
        <!-- Music Profile Section -->
        <div class="section" id="Music Profile Building">

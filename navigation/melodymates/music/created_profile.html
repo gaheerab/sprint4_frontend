@@ -62,7 +62,7 @@ permalink: /melodymates/created_profile.html/
     </style>
 </head>
 <body>
-    <h1>Gaheera's Profile</h1>
+    <h1>Your Profile</h1>
     <div id="profile">
         <p><strong>Name:</strong> <span id="name"></span></p>
         <p><strong>Bio:</strong> <span id="bio"></span></p>
@@ -70,23 +70,32 @@ permalink: /melodymates/created_profile.html/
     </div>
 
     <script>
-        // Fetch Gaheera's profile data from the backend
-        fetch('http://127.0.0.1:8887/api/profile/Gaheera') // Adjust the URL if needed
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Populate the HTML with the fetched data
-                document.getElementById('name').textContent = data.Name;
-                document.getElementById('bio').textContent = data.Bio;
-                document.getElementById('favoriteArtists').textContent = data.FavoriteArtists;
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-            });
+        // Function to get a cookie value by name
+        function fetchProfile() {
+
+            const requestOptions = {
+                method: "GET",
+                redirect: "follow",
+                mode: "cors",
+                credentials: "include"
+            };
+
+            fetch("http://127.0.0.1:8887/api/profileId", requestOptions)
+                .then((response) => response.json()) // Expecting JSON data from the server
+                .then((result) => {
+                    // Display user data in the HTML
+                    document.getElementById('name').textContent = result.name;
+                    document.getElementById('bio').textContent = result.bio;
+                    document.getElementById('favoriteArtists').textContent = result.favorite_artist;
+                })
+                .catch((error) => {
+                    console.error("Error fetching profile:", error);
+                    alert("An error occurred while fetching the profile.");
+                });
+        }
+
+        // Call the fetchProfile function when the page loads
+        window.onload = fetchProfile;
     </script>
 </body>
 </html>
