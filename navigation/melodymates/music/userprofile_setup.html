@@ -91,7 +91,7 @@ permalink: /melodymates/userprofile_setup.html/
             <input type="text" id="artists" name="artists" placeholder="Comma-separated list" required>
 
             <label for="profilePicture">Profile Picture:</label>
-            <input type="file" id="profilePicture" name="profile_picture" accept="image/*">
+            <input type="text" id="profilePicture" name="profilePicture" placeholder="Profile Picture URL" required>
 
             <div class="checkbox-label">
                 <input type="checkbox" id="noPicture" name="no_picture" onchange="toggleProfilePicture()">
@@ -103,12 +103,87 @@ permalink: /melodymates/userprofile_setup.html/
     </div>
 
     <script>
+        import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
         function toggleProfilePicture() {
             const profilePictureInput = document.getElementById('profilePicture');
             const noPictureCheckbox = document.getElementById('noPicture');
             profilePictureInput.disabled = noPictureCheckbox.checked;
         }
 
+        // Sample fetch request for creating a new public profile
+        const createProfile = async (name, artists, bio, profilePicture) => {
+            const url = `${pythonURI}/api/profileAuthenticate`; // Replace with your actual API endpoint
+        
+            const data = {
+                name: name, // Replace with the desired name
+                uid: name,     // Replace with the desired user ID
+                pfp: profilePicture, // Optional profile picture URL
+                bio: bio,      // Optional bio
+                favorite_artist: artists           // Optional favorite artist
+            };
+        
+            try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+        
+            if (!response.ok) {
+                // Handle errors based on response status
+                const errorData = await response.json();
+                console.error("Error:", errorData.message);
+                alert(`Error: ${errorData.message}`);
+            } else {
+                // Handle success
+                const result = await response.json();
+                console.log("Success:", result);
+                alert("Profile created successfully!");
+            }
+            } catch (error) {
+            console.error("Fetch error:", error);
+            alert("An error occurred while creating the profile.");
+            }
+        };
+
+        // Sample fetch request for user authentication and JWT generation
+        const authenticateUser = async (name) => {
+            const url = `${pythonURI}/api/profileAuthenticate`; // Replace with your actual API endpoint
+        
+            const data = {
+                uid: "name",         // Replace with the user ID
+            };
+        
+            try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data),
+                credentials: "include" // Include cookies in the request
+            });
+        
+            if (!response.ok) {
+                // Handle errors based on response status
+                const errorData = await response.json();
+                console.error("Error:", errorData.message);
+                alert(`Error: ${errorData.message}`);
+            } else {
+                // Handle success
+                const result = await response.text(); // Get the success response as text
+                console.log("Success:", result);
+                alert("Authentication successful!");
+            }
+            } catch (error) {
+            console.error("Fetch error:", error);
+            alert("An error occurred during authentication.");
+            }
+        };
+        
         function handleFormSubmission(event) {
             event.preventDefault(); // Prevent form from reloading the page
 
@@ -136,6 +211,9 @@ permalink: /melodymates/userprofile_setup.html/
                 artists,
                 profilePicture: profilePicture ? profilePicture.name : "No Picture"
             });
+
+            createProfile(name, artists, bio, profilePicture);
+            authenticateUser(name, artists, bio, profilePicture);
 
             // Redirect to created profile page
             window.location.href = "{{ site.baseurl }}/melodymates/created_profile.html/";
