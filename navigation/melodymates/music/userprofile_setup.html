@@ -142,6 +142,12 @@ permalink: /melodymates/userprofile_setup.html/
             console.error("Fetch error:", error);
             // alert("An error occurred while creating the profile.");
             }
+
+
+            setTimeout(() => {
+                authenticateUser(name);
+            }, 1000);
+  
         };
 
         // Sample fetch request for user authentication and JWT generation
@@ -212,13 +218,52 @@ permalink: /melodymates/userprofile_setup.html/
                 profilePicture
             });
 
-            createProfile(name, artists, bio, profilePicture);
-            authenticateUser(name);
+            async function runProcess() {
+                await createProfile(name, artists, bio, profilePicture);
+                showProfileLinkButton();
+            }
 
-            // Redirect to created profile page
-            window.location.href = "{{ site.baseurl }}/melodymates/created_profile.html/";
-            return false
+            runProcess();
+
         }
+
+        // Dynamically create and display the button after profile creation
+        function showProfileLinkButton() {
+            const buttonContainer = document.createElement('div'); // Create a container for the button
+            const button = document.createElement('button');
+            button.textContent = "Go to Profile";
+            button.style.background = 'linear-gradient(145deg, #f0a500, #d18b00)';
+            button.style.border = 'none';
+            button.style.padding = '12px';
+            button.style.fontSize = '1em';
+            button.style.color = '#fff';
+            button.style.cursor = 'pointer';
+            button.style.borderRadius = '5px';
+            button.style.transition = 'background 0.3s ease, transform 0.3s ease';
+
+            // Style the button on hover
+            button.addEventListener('mouseenter', function () {
+                button.style.backgroundColor = '#ffc107';
+                button.style.transform = 'scale(1.05)';
+            });
+
+            button.addEventListener('mouseleave', function () {
+                button.style.backgroundColor = '#f0a500';
+                button.style.transform = 'scale(1)';
+            });
+
+            // When the button is clicked, redirect to the profile page
+            button.addEventListener('click', function () {
+                window.location.href = "{{ site.baseurl }}/melodymates/created_profile.html/";
+            });
+
+            buttonContainer.appendChild(button); // Append the button to the container
+
+            // Append the button container to the form (or anywhere else in the DOM)
+            const formContainer = document.querySelector('.container');
+            formContainer.appendChild(buttonContainer);
+        }
+
     </script>
 </body>
 </html>
