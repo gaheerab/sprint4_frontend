@@ -14,12 +14,7 @@ if (location.hostname === "localhost") {
 } else {
         javaURI = "https://flocker-j.nighthawkcodingsociety.com";
 }
-export var pythonURI;
-if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-    pythonURI = "http://localhost:8084";  // Same URI for localhost or 127.0.0.1
-} else {
-    pythonURI = "https://flask2025.nighthawkcodingsociety.com";
-}
+
 export const fetchOptions = {
     method: 'GET', // *GET, POST, PUT, DELETE, etc.
     mode: 'cors', // no-cors, *cors, same-origin
