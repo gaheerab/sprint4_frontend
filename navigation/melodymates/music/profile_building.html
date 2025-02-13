@@ -145,10 +145,18 @@ permalink: /melodymates/profile_building.html/
         <button id="closeModalButton">Close</button>
     </div>
 </div>
-
 <script>
+    let pythonURI = ""
+    if (location.hostname === "localhost") {
+        pythonURI = "http://localhost:8887";
+    } else if (location.hostname === "127.0.0.1") {
+            pythonURI = "http://127.0.0.1:8887";
+    } else {
+            pythonURI =  "https://melodymates.stu.nighthawkcodingsociety.com";
+    }
+    console.log(pythonURI)
     // API URL
-    const apiUrl = "http://localhost:8887/api/musicpref"; // Update with your actual API URL
+    const apiUrl = pythonURI + "/api/musicpref"; // Update with your actual API URL
 
     let editingId = null; // This variable will hold the ID of the item being edited
     let editingUID = null
