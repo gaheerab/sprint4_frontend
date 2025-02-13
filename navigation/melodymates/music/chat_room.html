@@ -282,7 +282,19 @@ permalink: /melodymates/chat_room.html/
 </div>
 
 <script>
-    const API_BASE_URL = 'http://127.0.0.1:8887/api/music_chat';
+    let pythonURI = ""
+    if (location.hostname === "localhost") {
+        pythonURI = "http://localhost:8887";
+    } else if (location.hostname === "127.0.0.1") {
+            pythonURI = "http://127.0.0.1:8887";
+    } else {
+            pythonURI =  "https://melodymates.stu.nighthawkcodingsociety.com";
+    }
+    console.log(pythonURI)
+    // API URL
+    const apiUrl = pythonURI + "/api/musichat"; // Update with your actual API URL
+
+    const API_BASE_URL = 'http://127.0.0.1:8887/api/music_chat'; //idk if I need this
 
     // Function to fetch all chat messages
     async function fetchMessages() {
