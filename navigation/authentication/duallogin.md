@@ -55,11 +55,11 @@ search_exclude: true
 <div class="login-container">
     <!-- Java Login Form -->
     <div class="login-card">
-        <h1 id="javaTitle"> User Login</h1>
+        <h1 id="javaTitle"> User Login (Java)</h1>
         <form id="javaForm" onsubmit="javaLogin(); return false;">
             <p>
                 <label>
-                    Username:
+                    User ID:
                     <input type="text" name="uid" id="uid" required>
                 </label>
             </p>
@@ -92,11 +92,11 @@ search_exclude: true
     </div>
     <!-- Python Login Form -->
     <div class="login-card">
-        <h1 id="pythonTitle">User Login</h1>
+        <h1 id="pythonTitle">User Login (Python)</h1>
         <form id="pythonForm" onsubmit="pythonLogin(); return false;">
             <p>
                 <label>
-                    Username:
+                    User ID:
                     <input type="text" name="python-uid" id="python-uid" required>
                 </label>
             </p>
