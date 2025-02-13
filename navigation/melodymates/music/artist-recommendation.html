@@ -12,14 +12,87 @@ permalink: /melodymates/artist-recommendation.html/
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArtInfo CRUD</title>
   <style>
+    body {
+      background-color: #e6f7ff; /* Light blue background */
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
     table, th, td {
-      border: 1px solid black;
+      border: 2px solid #1a3d5b; /* Dark blue border */
       border-collapse: collapse;
       padding: 8px;
       text-align: left;
     }
+
     th {
-      background-color: #f2f2f2;
+      background-color: #b3c6ff; /* Light blue header */
+      color: #003366; /* Dark blue text for headers */
+    }
+
+    td {
+      background-color: #f2f2f2; /* Light grey background for table cells */
+    }
+
+    button {
+      background-color: #1a3d5b; /* Dark blue button */
+      color: white;
+      border: 2px solid #1a3d5b; /* Dark blue border around button */
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #003366; /* Darker blue on hover */
+      border-color: #003366; /* Darker blue border on hover */
+    }
+
+    h1, h2 {
+      color: #003366; /* Dark blue text for headings */
+      margin-left: 10px;
+    }
+
+    input[type="text"] {
+      padding: 5px;
+      border: 2px solid #1a3d5b; /* Dark blue border for input fields */
+      border-radius: 3px;
+    }
+
+    label {
+      color: #003366; /* Dark blue text for labels */
+    }
+
+    form {
+      margin: 20px;
+    }
+
+    table {
+      width: 90%;
+      margin: 20px auto;
+    }
+
+    #updateForm {
+      display: none;
+      background-color: #fff;
+      padding: 20px;
+      border: 2px solid #1a3d5b; /* Dark blue border for the update form */
+      border-radius: 5px;
+      margin-top: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #updateForm label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    #updateForm input {
+      width: 100%;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -49,13 +122,42 @@ permalink: /melodymates/artist-recommendation.html/
         <th>Username</th>
         <th>Favorite Artists</th>
         <th>Actions</th>
-        <th>Reccomended Artists</th>
+        <th>Recommended Artists</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
 
+  <!-- Update form for modifying user info -->
+  <div id="updateForm">
+    <h2>Update User Information</h2>
+    <form id="editUserForm">
+      <label for="updateName">Name:</label>
+      <input type="text" id="updateName"><br><br>
+
+      <label for="updateFavorites">Favorite Artists:</label>
+      <input type="text" id="updateFavorites"><br><br>
+
+      <button type="submit">Update</button>
+      <button type="button" id="cancelUpdate">Cancel</button>
+    </form>
+  </div>
+
   <script>
+    let pythonURI;
+    if (location.hostname === "localhost") {
+      pythonURI = "http://localhost:8887";
+    } else if (location.hostname === "127.0.0.1") {
+      pythonURI = "http://127.0.0.1:8887";
+    } else {
+      pythonURI = "https://melodymates.stu.nighthawkcodingsociety.com";
+    }
+
+    // Helper function for fetch requests
+    function apiFetch(endpoint, options = {}) {
+      return fetch(pythonURI + endpoint, options)
+        .then(response => response.json());
+    }
     let editingUserId = null;  // Track the user being edited
 
     // Handle form submission for adding/updating users
@@ -63,6 +165,7 @@ permalink: /melodymates/artist-recommendation.html/
       event.preventDefault();
       
       // Gather form data
+      
       const name = document.getElementById('name').value;
       const uid = document.getElementById('uid').value;
       const favorites = document.getElementById('favorites').value.split(',').map(item => item.trim());
@@ -104,6 +207,7 @@ permalink: /melodymates/artist-recommendation.html/
         loadUsers();  // Refresh the user list
         resetForm();  // Reset form fields and stop editing
         editingUserId = null;  // Clear the editingUserId
+        document.getElementById('updateForm').style.display = 'none';  // Hide the update form
       });
     }
 
@@ -136,17 +240,35 @@ permalink: /melodymates/artist-recommendation.html/
         });
     }
 
-    // Edit user and populate the form
+    // Edit user and populate the update form
     function editUser(uid) {
       fetch(`http://localhost:8887/api/artinfo?uid=${uid}`)
         .then(response => response.json())
         .then(user => {
-          document.getElementById('name').value = user.name;
-          document.getElementById('uid').value = user.uid;
-          document.getElementById('favorites').value = user.favorites.join(', ');
+          document.getElementById('updateName').value = user.name;
+          document.getElementById('updateFavorites').value = user.favorites.join(', ');
           editingUserId = user.uid;  // Set the user ID to track during update
-        });
+          document.getElementById('updateForm').style.display = 'block';  // Show the update form
+        })
+        .catch(error => console.log('Error:', error));
     }
+
+    // Cancel update and hide the update form
+    document.getElementById('cancelUpdate').addEventListener('click', function() {
+      document.getElementById('updateForm').style.display = 'none';
+    });
+
+    // Update user information from the update form
+    document.getElementById('editUserForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('updateName').value;
+      const favorites = document.getElementById('updateFavorites').value.split(',').map(item => item.trim());
+
+      const data = { name, favorites };
+
+      updateUser(data);
+    });
 
     // Delete user
     function deleteUser(uid) {
