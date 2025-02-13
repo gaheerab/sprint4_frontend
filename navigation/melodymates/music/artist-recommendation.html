@@ -144,20 +144,17 @@ permalink: /melodymates/artist-recommendation.html/
   </div>
 
   <script>
-    let pythonURI;
+    let pythonURI = ""
     if (location.hostname === "localhost") {
-      pythonURI = "http://localhost:8887";
+        pythonURI = "http://localhost:8887";
     } else if (location.hostname === "127.0.0.1") {
-      pythonURI = "http://127.0.0.1:8887";
+            pythonURI = "http://127.0.0.1:8887";
     } else {
-      pythonURI = "https://melodymates.stu.nighthawkcodingsociety.com";
+            pythonURI =  "https://melodymates.stu.nighthawkcodingsociety.com";
     }
-
-    // Helper function for fetch requests
-    function apiFetch(endpoint, options = {}) {
-      return fetch(pythonURI + endpoint, options)
-        .then(response => response.json());
-    }
+    console.log(pythonURI)
+    // API URL
+    const apiUrl = pythonURI + "/api/artinfo"; // Update with your actual API URL
     let editingUserId = null;  // Track the user being edited
 
     // Handle form submission for adding/updating users
