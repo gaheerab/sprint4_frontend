@@ -18,23 +18,19 @@ permalink: /melodymates/artist-recommendation.html/
       margin: 0;
       padding: 0;
     }
-
     table, th, td {
       border: 2px solid #1a3d5b; /* Dark blue border */
       border-collapse: collapse;
       padding: 8px;
       text-align: left;
     }
-
     th {
       background-color: #b3c6ff; /* Light blue header */
       color: #003366; /* Dark blue text for headers */
     }
-
     td {
       background-color: #f2f2f2; /* Light grey background for table cells */
     }
-
     button {
       background-color: #1a3d5b; /* Dark blue button */
       color: white;
@@ -43,56 +39,28 @@ permalink: /melodymates/artist-recommendation.html/
       cursor: pointer;
       border-radius: 5px;
     }
-
     button:hover {
       background-color: #003366; /* Darker blue on hover */
       border-color: #003366; /* Darker blue border on hover */
     }
-
     h1, h2 {
       color: #003366; /* Dark blue text for headings */
       margin-left: 10px;
     }
-
     input[type="text"] {
       padding: 5px;
       border: 2px solid #1a3d5b; /* Dark blue border for input fields */
       border-radius: 3px;
     }
-
     label {
       color: #003366; /* Dark blue text for labels */
     }
-
     form {
       margin: 20px;
     }
-
     table {
       width: 90%;
       margin: 20px auto;
-    }
-
-    #updateForm {
-      display: none;
-      background-color: #fff;
-      padding: 20px;
-      border: 2px solid #1a3d5b; /* Dark blue border for the update form */
-      border-radius: 5px;
-      margin-top: 20px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    #updateForm label {
-      display: block;
-      margin-bottom: 10px;
-    }
-
-    #updateForm input {
-      width: 100%;
-      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -105,7 +73,7 @@ permalink: /melodymates/artist-recommendation.html/
     <label for="name">Name:</label>
     <input type="text" id="name" required><br><br>
 
-    <label for="uid">Username(Keep the same when updating):</label>
+    <label for="uid">Username(Unchangeable):</label>
     <input type="text" id="uid" required><br><br>
 
     <label for="favorites">Favorite Artist(s) (comma-separated):</label>
@@ -128,21 +96,6 @@ permalink: /melodymates/artist-recommendation.html/
     <tbody></tbody>
   </table>
 
-  <!-- Update form for modifying user info -->
-  <div id="updateForm">
-    <h2>Update User Information</h2>
-    <form id="editUserForm">
-      <label for="updateName">Name:</label>
-      <input type="text" id="updateName"><br><br>
-
-      <label for="updateFavorites">Favorite Artists:</label>
-      <input type="text" id="updateFavorites"><br><br>
-
-      <button type="submit">Update</button>
-      <button type="button" id="cancelUpdate">Cancel</button>
-    </form>
-  </div>
-
   <script>
     let pythonURI = ""
     if (location.hostname === "localhost") {
@@ -155,132 +108,110 @@ permalink: /melodymates/artist-recommendation.html/
     console.log(pythonURI)
     // API URL
     const apiUrl = pythonURI + "/api/artinfo"; // Update with your actual API URL
-    let editingUserId = null;  // Track the user being edited
+    let editingUserId = null;
 
-    // Handle form submission for adding/updating users
-    document.getElementById('userForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      
-      // Gather form data
-      
-      const name = document.getElementById('name').value;
-      const uid = document.getElementById('uid').value;
-      const favorites = document.getElementById('favorites').value.split(',').map(item => item.trim());
+      // Handle form submission for adding/updating users
+  document.getElementById('userForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const name = document.getElementById('name').value;
+    const uid = document.getElementById('uid').value;
+    const favorites = document.getElementById('favorites').value.split(',').map(item => item.trim());
 
-      const data = { name, uid, favorites };
+    const data = { name, favorites };
 
-      if (editingUserId) {
-        // If editing, send PUT request
-        updateUser(data);
-      } else {
-        // If not editing, send POST request
-        createUser(data);
-      }
-    });
+    if (editingUserId) {
+      updateUser(uid, data);
+    } else {
+      createUser({ name, uid, favorites });
+    }
+  });
 
-    // Create new user (POST request)
-    function createUser(data) {
-      fetch('http://localhost:8887/api/artinfo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      })
-      .then(response => response.json())
+  // Create new user (POST request)
+  function createUser(data) {
+    fetch('http://localhost:8887/api/artinfo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).then(response => response.json())
       .then(() => {
-        loadUsers();  // Refresh the user list
-        resetForm();  // Reset form fields
+        loadUsers();
+        resetForm();
       });
-    }
+  }
 
-    // Update user (PUT request)
-    function updateUser(data) {
-      fetch('http://localhost:8887/api/artinfo', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, uid: editingUserId }),
-      })
-      .then(response => response.json())
+  // Update user (PUT request)
+  function updateUser(uid, data) {
+    fetch(`http://localhost:8887/api/artinfo`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uid, name: data.name || "", favorites: data.favorites }),
+    }).then(response => response.json())
       .then(() => {
-        loadUsers();  // Refresh the user list
-        resetForm();  // Reset form fields and stop editing
-        editingUserId = null;  // Clear the editingUserId
-        document.getElementById('updateForm').style.display = 'none';  // Hide the update form
+        loadUsers();
+        resetForm();
+        editingUserId = null;
+
+        // Re-enable the UID field after successful update
+        document.getElementById('uid').disabled = false;
       });
-    }
+  }
 
-    // Reset form fields after submission
-    function resetForm() {
-      document.getElementById('name').value = '';
-      document.getElementById('uid').value = '';
-      document.getElementById('favorites').value = '';
-    }
+  // Reset form fields
+  function resetForm() {
+    document.getElementById('name').value = '';
+    document.getElementById('uid').value = '';
+    document.getElementById('favorites').value = '';
+  }
 
-    // Fetch all users and populate the table
-    function loadUsers() {
-      fetch('http://localhost:8887/api/artinfo')
-        .then(response => response.json())
-        .then(data => {
-          const tableBody = document.getElementById('userTable').getElementsByTagName('tbody')[0];
-          tableBody.innerHTML = '';  // Clear table before adding new rows
-          data.forEach(user => {
-            const row = tableBody.insertRow();
-            row.innerHTML = `
-              <td>${user.name}</td>
-              <td>${user.uid}</td>
-              <td>${user.favorites.join(', ')}</td>
-              <td>
-                <button onclick="editUser('${user.uid}')">Update</button>
-                <button onclick="deleteUser('${user.uid}')">Delete</button>
-              </td>
-            `;
-          });
+  // Fetch all users and populate the table
+  function loadUsers() {
+    fetch('http://localhost:8887/api/artinfo')
+      .then(response => response.json())
+      .then(data => {
+        const tableBody = document.getElementById('userTable').getElementsByTagName('tbody')[0];
+        tableBody.innerHTML = '';
+        data.forEach(user => {
+          const row = tableBody.insertRow();
+          row.innerHTML = `
+            <td>${user.name}</td>
+            <td>${user.uid}</td>
+            <td>${user.favorites.join(', ')}</td>
+            <td>
+              <button onclick="editUser('${user.uid}')">Update</button>
+              <button onclick="deleteUser('${user.uid}')">Delete</button>
+            </td>
+          `;
         });
-    }
-
-    // Edit user and populate the update form
-    function editUser(uid) {
-      fetch(`http://localhost:8887/api/artinfo?uid=${uid}`)
-        .then(response => response.json())
-        .then(user => {
-          document.getElementById('updateName').value = user.name;
-          document.getElementById('updateFavorites').value = user.favorites.join(', ');
-          editingUserId = user.uid;  // Set the user ID to track during update
-          document.getElementById('updateForm').style.display = 'block';  // Show the update form
-        })
-        .catch(error => console.log('Error:', error));
-    }
-
-    // Cancel update and hide the update form
-    document.getElementById('cancelUpdate').addEventListener('click', function() {
-      document.getElementById('updateForm').style.display = 'none';
-    });
-
-    // Update user information from the update form
-    document.getElementById('editUserForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-
-      const name = document.getElementById('updateName').value;
-      const favorites = document.getElementById('updateFavorites').value.split(',').map(item => item.trim());
-
-      const data = { name, favorites };
-
-      updateUser(data);
-    });
-
-    // Delete user
-    function deleteUser(uid) {
-      fetch('http://localhost:8887/api/artinfo', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ uid }),
-      })
-      .then(() => {
-        loadUsers();  // Refresh the user list
       });
-    }
+  }
 
-    // Initial load of users
-    loadUsers();
+  // Edit user
+  function editUser(uid) {
+    fetch(`http://localhost:8887/api/artinfo?uid=${uid}`)
+      .then(response => response.json())
+      .then(user => {
+        document.getElementById('name').value = '';
+        document.getElementById('uid').value = user.uid || uid;
+        document.getElementById('favorites').value = user.favorites.join(', ');
+        editingUserId = uid;
+
+        // Disable the UID field when editing (immediately)
+        document.getElementById('uid').disabled = true;
+      });
+  }
+
+  // Delete user
+  function deleteUser(uid) {
+    fetch(`http://localhost:8887/api/artinfo`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uid })
+    }).then(() => loadUsers());
+  }
+
+  // Initial load of users
+  loadUsers();
+
   </script>
 </body>
 </html>
