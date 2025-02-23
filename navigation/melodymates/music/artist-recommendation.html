@@ -1,6 +1,6 @@
 ---
 layout: base 
-title: artist-reccomendation 
+title: artist-reccommendation 
 search_exclude: true
 permalink: /melodymates/artist-recommendation.html/
 ---
@@ -13,54 +13,75 @@ permalink: /melodymates/artist-recommendation.html/
   <title>ArtInfo CRUD</title>
   <style>
     body {
-      background-color: #e6f7ff; /* Light blue background */
+      background-color: #001f3d;
+      color: #cce4ff;
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    table, th, td {
-      border: 2px solid #1a3d5b; /* Dark blue border */
-      border-collapse: collapse;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #b3c6ff; /* Light blue header */
-      color: #003366; /* Dark blue text for headers */
-    }
-    td {
-      background-color: #f2f2f2; /* Light grey background for table cells */
-    }
-    button {
-      background-color: #1a3d5b; /* Dark blue button */
-      color: white;
-      border: 2px solid #1a3d5b; /* Dark blue border around button */
-      padding: 8px 16px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    button:hover {
-      background-color: #003366; /* Darker blue on hover */
-      border-color: #003366; /* Darker blue border on hover */
+      padding: 20px;
     }
     h1, h2 {
-      color: #003366; /* Dark blue text for headings */
-      margin-left: 10px;
+      text-align: center;
+      color: #5bb6e1;
     }
-    input[type="text"] {
-      padding: 5px;
-      border: 2px solid #1a3d5b; /* Dark blue border for input fields */
-      border-radius: 3px;
+    input, button {
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #5bb6e1;
+      border-radius: 4px;
     }
-    label {
-      color: #003366; /* Dark blue text for labels */
+    button {
+      background-color: #5bb6e1;
+      color: white;
+      cursor: pointer;
     }
-    form {
-      margin: 20px;
+    button:hover {
+      background-color: #4da0d1;
     }
-    table {
-      width: 90%;
-      margin: 20px auto;
+    .survey-table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      color: #cce4ff;
+    }
+    .survey-table th, .survey-table td {
+      padding: 10px;
+      border: 1px solid #5bb6e1;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background-color: #001f3d;
+      padding: 20px;
+      border-radius: 4px;
+      width: 400px;
+      color: #cce4ff;
+      position: relative;
+    }
+    .modal button {
+      background-color: #5bb6e1;
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .modal button:hover {
+      background-color: #4da0d1;
+    }
+    .close-button {
+      color: #fff;
+      font-size: 30px;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -68,12 +89,12 @@ permalink: /melodymates/artist-recommendation.html/
   <h1>Artist Recommendation</h1>
   <h2>User Input</h2>
 
-  <!-- Form for adding/updating users -->
+  <!-- Form for adding new users -->
   <form id="userForm">
     <label for="name">Name:</label>
     <input type="text" id="name" required><br><br>
 
-    <label for="uid">Username(Unchangeable):</label>
+    <label for="uid">Username:</label>
     <input type="text" id="uid" required><br><br>
 
     <label for="favorites">Favorite Artist(s) (comma-separated):</label>
@@ -96,122 +117,138 @@ permalink: /melodymates/artist-recommendation.html/
     <tbody></tbody>
   </table>
 
+  <!-- Modal for updating user info (only editable fields: name & favorite artists) -->
+  <div id="updateModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h2>Update User Information</h2>
+      <form id="editUserForm">
+        <label for="updateName">Name:</label>
+        <input type="text" id="updateName"><br><br>
+
+        <label for="updateFavorites">Favorite Artists:</label>
+        <input type="text" id="updateFavorites"><br><br>
+
+        <button type="submit">Update</button>
+      </form>
+    </div>
+  </div>
+
   <script>
-    let pythonURI = ""
-    if (location.hostname === "localhost") {
-        pythonURI = "http://localhost:8887";
-    } else if (location.hostname === "127.0.0.1") {
-            pythonURI = "http://127.0.0.1:8887";
-    } else {
-            pythonURI =  "https://melodymates.stu.nighthawkcodingsociety.com";
-    }
-    console.log(pythonURI)
-    // API URL
-    const apiUrl = pythonURI + "/api/artinfo"; // Update with your actual API URL
-    let editingUserId = null;
 
-      // Handle form submission for adding/updating users
-  document.getElementById('userForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const name = document.getElementById('name').value;
-    const uid = document.getElementById('uid').value;
-    const favorites = document.getElementById('favorites').value.split(',').map(item => item.trim());
 
-    const data = { name, favorites };
+    let editingUserId = null; // Stores the UID of the user being edited
 
-    if (editingUserId) {
-      updateUser(uid, data);
-    } else {
-      createUser({ name, uid, favorites });
-    }
-  });
+    // Handle modal form submission for updating user info
+    document.getElementById('editUserForm').addEventListener('submit', function(event) {
+      event.preventDefault();
 
-  // Create new user (POST request)
-  function createUser(data) {
-    fetch('http://localhost:8887/api/artinfo', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    }).then(response => response.json())
-      .then(() => {
-        loadUsers();
-        resetForm();
-      });
-  }
+      const requestData = {
+        name: document.getElementById('updateName').value,
+        uid: editingUserId, // UID comes from the user we're editing
+        favorites: document.getElementById('updateFavorites').value.split(',').map(item => item.trim())
+      };
 
-  // Update user (PUT request)
-  function updateUser(uid, data) {
-    fetch(`http://localhost:8887/api/artinfo`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ uid, name: data.name || "", favorites: data.favorites }),
-    }).then(response => response.json())
-      .then(() => {
+      console.log("Request Data:", requestData);
+
+      if (!editingUserId) {
+        console.log("ERROR: editingUserId is null. Can't update user.");
+        alert('Error: UID is missing.');
+        return;
+      }
+
+      fetch(`${pythonURI}/api/artinfo`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestData)
+      })
+      .then(response => response.json())
+      .then(updatedData => {
+        console.log('Updated data:', updatedData);
         loadUsers();
         resetForm();
         editingUserId = null;
-
-        // Re-enable the UID field after successful update
-        document.getElementById('uid').disabled = false;
+        document.getElementById('updateModal').style.display = 'none';
+      })
+      .catch(error => {
+        console.error('Error updating user:', error);
+        alert('There was an error updating the user.');
       });
-  }
+    });
 
-  // Reset form fields
-  function resetForm() {
-    document.getElementById('name').value = '';
-    document.getElementById('uid').value = '';
-    document.getElementById('favorites').value = '';
-  }
+    function resetForm() {
+      document.getElementById('updateName').value = '';
+      document.getElementById('updateFavorites').value = '';
+    }
 
-  // Fetch all users and populate the table
-  function loadUsers() {
-    fetch('http://localhost:8887/api/artinfo')
-      .then(response => response.json())
-      .then(data => {
-        const tableBody = document.getElementById('userTable').getElementsByTagName('tbody')[0];
-        tableBody.innerHTML = '';
-        data.forEach(user => {
-          const row = tableBody.insertRow();
-          row.innerHTML = `
-            <td>${user.name}</td>
-            <td>${user.uid}</td>
-            <td>${user.favorites.join(', ')}</td>
-            <td>
-              <button onclick="editUser('${user.uid}')">Update</button>
-              <button onclick="deleteUser('${user.uid}')">Delete</button>
-            </td>
-          `;
+    // Load all users into the table
+    function loadUsers() {
+      fetch(`${pythonURI}/api/artinfo`)
+        .then(response => response.json())
+        .then(data => {
+          const tableBody = document.getElementById('userTable').getElementsByTagName('tbody')[0];
+          tableBody.innerHTML = '';
+          data.forEach(user => {
+            const row = tableBody.insertRow();
+            row.innerHTML = `
+              <td>${user.name}</td>
+              <td>${user.uid}</td>
+              <td>${user.favorites.join(', ')}</td>
+              <td>
+                <button onclick="editUser('${user.uid}')">Update</button>
+                <button onclick="deleteUser('${user.uid}')">Delete</button>
+              </td>
+            `;
+          });
         });
+    }
+
+    // Open modal and populate fields with the selected user's data
+    function editUser(uid) {
+      console.log("Clicked edit for UID:", uid);
+      fetch(`${pythonURI}/api/artinfo?uid=${uid}`)
+        .then(response => response.json())
+        .then(user => {
+          console.log("User data fetched:", user);
+          document.getElementById('updateName').value = user.name;
+          const favorites = Array.isArray(user.favorites) ? user.favorites : [];
+          document.getElementById('updateFavorites').value = favorites.join(', ');
+          editingUserId = user.uid; // Set the UID for updating
+          console.log("Editing user UID set to:", editingUserId);
+          document.getElementById('updateModal').style.display = 'flex';
+        })
+        .catch(error => {
+          console.log('Error:', error);
+          alert('There was an error fetching user data.');
+        });
+    }
+
+    // Hide modal on clicking the close button
+    document.querySelector(".close-button").addEventListener("click", function() {
+      document.getElementById("updateModal").style.display = "none";
+    });
+
+    // Hide modal if clicking outside the modal content
+    window.onclick = function(event) {
+      if (event.target === document.getElementById("updateModal")) {
+        document.getElementById("updateModal").style.display = "none";
+      }
+    };
+
+    // Delete user and refresh table
+    function deleteUser(uid) {
+      fetch(`${pythonURI}/api/artinfo`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uid })
+      })
+      .then(() => {
+        loadUsers();
       });
-  }
+    }
 
-  // Edit user
-  function editUser(uid) {
-    fetch(`http://localhost:8887/api/artinfo?uid=${uid}`)
-      .then(response => response.json())
-      .then(user => {
-        document.getElementById('name').value = '';
-        document.getElementById('uid').value = user.uid || uid;
-        document.getElementById('favorites').value = user.favorites.join(', ');
-        editingUserId = uid;
-
-        // Disable the UID field when editing (immediately)
-        document.getElementById('uid').disabled = true;
-      });
-  }
-
-  // Delete user
-  function deleteUser(uid) {
-    fetch(`http://localhost:8887/api/artinfo`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ uid })
-    }).then(() => loadUsers());
-  }
-
-  // Initial load of users
-  loadUsers();
-
+    // Initial load of users
+    loadUsers();
   </script>
 </body>
 </html>
