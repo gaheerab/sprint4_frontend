@@ -134,15 +134,15 @@ permalink: /melodymates/artist-recommendation.html/
     </div>
   </div>
 
-  <script>
-
-
-    let editingUserId = null; // Stores the UID of the user being edited
-
+  <script type="module">
+    import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+  
+    let editingUserId = null;
+  
     // Handle modal form submission for updating user info
     document.getElementById('editUserForm').addEventListener('submit', function(event) {
       event.preventDefault();
-
+  
       const requestData = {
         name: document.getElementById('updateName').value,
         uid: editingUserId, // UID comes from the user we're editing
@@ -150,16 +150,17 @@ permalink: /melodymates/artist-recommendation.html/
       };
 
       console.log("Request Data:", requestData);
-
+  
       if (!editingUserId) {
         console.log("ERROR: editingUserId is null. Can't update user.");
         alert('Error: UID is missing.');
         return;
       }
-
+  
+      // Using fetchOptions in the PUT request
       fetch(`${pythonURI}/api/artinfo`, {
+        ...fetchOptions,  // Spread the fetchOptions here to add headers
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestData)
       })
       .then(response => response.json())
@@ -175,77 +176,133 @@ permalink: /melodymates/artist-recommendation.html/
         alert('There was an error updating the user.');
       });
     });
-
+  
     function resetForm() {
       document.getElementById('updateName').value = '';
       document.getElementById('updateFavorites').value = '';
     }
-
+  
     // Load all users into the table
     function loadUsers() {
-      fetch(`${pythonURI}/api/artinfo`)
-        .then(response => response.json())
-        .then(data => {
-          const tableBody = document.getElementById('userTable').getElementsByTagName('tbody')[0];
-          tableBody.innerHTML = '';
-          data.forEach(user => {
-            const row = tableBody.insertRow();
-            row.innerHTML = `
-              <td>${user.name}</td>
-              <td>${user.uid}</td>
-              <td>${user.favorites.join(', ')}</td>
-              <td>
-                <button onclick="editUser('${user.uid}')">Update</button>
-                <button onclick="deleteUser('${user.uid}')">Delete</button>
-              </td>
-            `;
-          });
+      fetch(`${pythonURI}/api/artinfo`, {
+        ...fetchOptions,  // Spread the fetchOptions here to add headers
+      })
+      .then(response => response.json())
+      .then(data => {
+        const tableBody = document.getElementById('userTable').getElementsByTagName('tbody')[0];
+        tableBody.innerHTML = '';
+        data.forEach(user => {
+          const row = tableBody.insertRow();
+          row.innerHTML = `
+            <td>${user.name}</td>
+            <td>${user.uid}</td>
+            <td>${user.favorites.join(', ')}</td>
+            <td>
+              <button class="edit-btn" data-uid="${user.uid}">Update</button>
+              <button class="delete-btn" data-uid="${user.uid}">Delete</button>
+            </td>
+          `;
         });
+        attachEventListeners();
+      });
     }
-
+  
+    // Attach event listeners to buttons after the table is populated
+    function attachEventListeners() {
+      const editButtons = document.querySelectorAll('.edit-btn');
+      const deleteButtons = document.querySelectorAll('.delete-btn');
+  
+      // Attach click events for the edit buttons
+      editButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+          const uid = event.target.getAttribute('data-uid');
+          editUser(uid);
+        });
+      });
+  
+      // Attach click events for the delete buttons
+      deleteButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+          const uid = event.target.getAttribute('data-uid');
+          deleteUser(uid);
+        });
+      });
+    }
+  
     // Open modal and populate fields with the selected user's data
     function editUser(uid) {
       console.log("Clicked edit for UID:", uid);
-      fetch(`${pythonURI}/api/artinfo?uid=${uid}`)
-        .then(response => response.json())
-        .then(user => {
-          console.log("User data fetched:", user);
-          document.getElementById('updateName').value = user.name;
-          const favorites = Array.isArray(user.favorites) ? user.favorites : [];
-          document.getElementById('updateFavorites').value = favorites.join(', ');
-          editingUserId = user.uid; // Set the UID for updating
-          console.log("Editing user UID set to:", editingUserId);
-          document.getElementById('updateModal').style.display = 'flex';
-        })
-        .catch(error => {
-          console.log('Error:', error);
-          alert('There was an error fetching user data.');
-        });
+      fetch(`${pythonURI}/api/artinfo?uid=${uid}`, {
+        ...fetchOptions,  // Spread the fetchOptions here to add headers
+      })
+      .then(response => response.json())
+      .then(user => {
+        console.log("User data fetched:", user);
+        document.getElementById('updateName').value = user.name;
+        const favorites = Array.isArray(user.favorites) ? user.favorites : [];
+        document.getElementById('updateFavorites').value = favorites.join(', ');
+        editingUserId = user.uid; // Set the UID for updating
+        console.log("Editing user UID set to:", editingUserId);
+        document.getElementById('updateModal').style.display = 'flex';
+      })
+      .catch(error => {
+        console.log('Error:', error);
+        alert('There was an error fetching user data.');
+      });
     }
-
+  
     // Hide modal on clicking the close button
     document.querySelector(".close-button").addEventListener("click", function() {
       document.getElementById("updateModal").style.display = "none";
     });
-
+  
     // Hide modal if clicking outside the modal content
     window.onclick = function(event) {
       if (event.target === document.getElementById("updateModal")) {
         document.getElementById("updateModal").style.display = "none";
       }
     };
-
+  
     // Delete user and refresh table
     function deleteUser(uid) {
       fetch(`${pythonURI}/api/artinfo`, {
+        ...fetchOptions,  // Spread the fetchOptions here to add headers
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ uid })
       })
       .then(() => {
         loadUsers();
       });
     }
+
+    // Handle form submission for adding a new user
+    document.getElementById('userForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const requestData = {
+        name: document.getElementById('name').value,
+        uid: document.getElementById('uid').value,
+        favorites: document.getElementById('favorites').value.split(',').map(item => item.trim())
+      };
+
+      console.log("Request Data for new user:", requestData);
+
+      fetch(`${pythonURI}/api/artinfo`, {
+        ...fetchOptions, 
+        method: 'POST',
+        body: JSON.stringify(requestData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('New user added:', data);
+        loadUsers();
+        document.getElementById('userForm').reset(); // Clear the form
+      })
+      .catch(error => {
+        console.error('Error adding new user:', error);
+        alert('There was an error adding the new user.');
+      });
+    });
 
     // Initial load of users
     loadUsers();
