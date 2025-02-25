@@ -7,146 +7,180 @@ menu: nav/melodymates.html
 ---
 
 
-
 <html lang="en">
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
    <style>
-       /* Default Theme (Dark Blue, Light Blue, Dark Green) */
-       {
-           background-color: #e3f2fd; /* Light Blue */
-           color: #006400; /* Dark Green */
-           font-family: Arial, sans-serif;
+       /* Global Styles */
+       body {
+           background: linear-gradient(135deg, #ff6b6b, #f06595, #8e44ad); /* Cool Gradient */
+           color: #fff;
+           font-family: 'Arial', sans-serif;
            margin: 0;
            padding: 0;
            transition: all 0.3s ease;
+           overflow-x: hidden;
        }
-
+       /* Navbar Styling */
        .navbar {
            display: flex;
            justify-content: space-around;
            align-items: center;
-           padding: 10px 20px;
-           background-color: #00008B; /* Dark Blue */
+           padding: 15px 30px;
+           background-color: rgba(0, 0, 0, 0.7); /* Dark with transparency */
            position: sticky;
            top: 0;
-           z-index: 10;
+           z-index: 100;
            transition: background-color 0.3s ease;
+           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
        }
-
        .navbar a {
            color: #fff;
            text-decoration: none;
-           font-size: 1.1em;
+           font-size: 1.2em;
            padding: 8px 16px;
-           transition: color 0.3s ease, border-bottom 0.3s ease;
-           border-bottom: 2px solid transparent;
+           border-radius: 5px;
+           position: relative;
+           overflow: hidden;
        }
-
+       .navbar a::after {
+           content: '';
+           position: absolute;
+           background: #f06595;
+           width: 100%;
+           height: 3px;
+           bottom: 0;
+           left: -100%;
+           transition: left 0.3s ease;
+       }
+       .navbar a:hover::after {
+           left: 0;
+       }
+       /* Navbar hover effect */
        .navbar a:hover {
-           color: #b2ebf2; /* Light Blue */
-           border-bottom: 2px solid #004d00; /* Dark Green */
+           background-color: rgba(255, 255, 255, 0.1);
            font-weight: bold;
        }
-
        /* Theme Toggle Button */
        .theme-toggle {
            background: none;
-           border: 2px solid #00008B; /* Dark Blue */
-           color: #00008B;
+           border: 2px solid #f06595;
+           color: #f06595;
            padding: 10px 20px;
            cursor: pointer;
            font-size: 1em;
-           border-radius: 5px;
+           border-radius: 25px;
            transition: all 0.3s ease;
+           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
        }
-
        .theme-toggle:hover {
-           background-color: #004d00;
+           background-color: #f06595;
            color: #fff;
+           transform: scale(1.1);
        }
-
-       /* Main container for music page */
+       /* Container Styling */
        .container {
            display: flex;
            flex-wrap: wrap;
-           justify-content: space-around;
+           justify-content: center;
            gap: 20px;
-           padding: 30px;
-           max-width: 1200px;
+           padding: 50px 20px;
+           max-width: 1400px;
            margin: 0 auto;
+           animation: fadeIn 1s ease-out;
        }
-
-       /* Sections for each feature */
+       /* Section Styling */
        .section {
-           background-color: #00008B; /* Dark Blue */
-           border-radius: 10px;
-           padding: 20px;
+           background: linear-gradient(135deg, #f06595, #8e44ad);
+           border-radius: 20px;
+           padding: 30px;
            width: 300px;
            text-align: center;
-           box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-           transition: background-color 0.3s ease, color 0.3s ease;
-       }
-
-       .section h2 {
-           color: #b2ebf2; /* Light Blue */
-           font-size: 1.5em;
-           margin-bottom: 15px;
-       }
-
-       .section p {
-           font-size: 0.9em;
-           color: #f1f1f1; /* Light Text */
-           margin-bottom: 20px;
-       }
-
-       /* Stylish Buttons */
-       .section button {
-           background: linear-gradient(145deg, #0288d1, #81d4fa); /* Gradient from Blue to Light Blue */
-           border: none;
-           padding: 10px 20px;
-           font-size: 1em;
-           color: white;
-           cursor: pointer;
-           border-radius: 5px;
+           box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
            transition: background 0.3s ease, transform 0.3s ease;
+           transform: scale(0.98);
        }
-
-       .section button:hover {
-           background-color: #00008B; /* Dark Blue */
+       .section:hover {
            transform: scale(1.05);
        }
-
-       /* Light Theme (for toggle functionality) */
+       .section h2 {
+           color: #fff;
+           font-size: 1.8em;
+           margin-bottom: 20px;
+           text-transform: uppercase;
+           animation: pulse 1.5s infinite;
+       }
+       .section p {
+           font-size: 1.1em;
+           margin-bottom: 20px;
+           color: #f1f1f1;
+           font-style: italic;
+       }
+       /* Stylish Buttons */
+       .section button {
+           background: linear-gradient(145deg, #1abc9c, #16a085); /* Gradient from teal to green */
+           border: none;
+           padding: 15px 30px;
+           font-size: 1.2em;
+           color: white;
+           cursor: pointer;
+           border-radius: 25px;
+           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+           transition: background 0.3s ease, transform 0.3s ease;
+       }
+       .section button:hover {
+           background-color: #f06595;
+           transform: scale(1.1);
+       }
+       /* Animation for Fading In */
+       @keyframes fadeIn {
+           0% {
+               opacity: 0;
+               transform: translateY(30px);
+           }
+           100% {
+               opacity: 1;
+               transform: translateY(0);
+           }
+       }
+       /* Animation for Pulsing Text */
+       @keyframes pulse {
+           0% {
+               text-shadow: 0 0 5px #ff69b4, 0 0 10px #ff69b4;
+           }
+           50% {
+               text-shadow: 0 0 20px #f06595, 0 0 40px #f06595;
+           }
+           100% {
+               text-shadow: 0 0 5px #ff69b4, 0 0 10px #ff69b4;
+           }
+       }
+       /* Light Mode Styles */
        body.light-mode {
-           background-color: #2c6e49; /* Sage Green */
-           color: #004d00; /* Dark Green */
+           background-color: #f0f4f8;
+           color: #2c3e50;
        }
-
        .navbar.light-mode {
-           background-color: #2c6e49; /*  Sage Green */
+           background-color: #f0f4f8;
        }
-
        .navbar.light-mode a {
-           color: #004d00;
+           color: #2c3e50;
        }
-
        .section.light-mode {
-           background-color: #2c6e49; /* Sage Green */
-           color: #004d00; /* Dark Green */
+           background: linear-gradient(135deg, #8e44ad, #f06595);
+           color: #2c3e50;
        }
-
        .section h2.light-mode {
-           color: #00008B; /* Dark Blue */
+           color: #f06595;
        }
-
        .section button.light-mode {
-           background: linear-gradient(145deg, #81c784, #0288d1); /* Gradient from Light Sage Green to Blue */
+           background: linear-gradient(145deg, #16a085, #1abc9c);
            color: white;
        }
 
    </style>
+
    <!-- Navigation Bar -->
    <div class="navbar">
        <a href="chat_room.html">Music Chatroom</a>
@@ -158,7 +192,7 @@ menu: nav/melodymates.html
    </div>
 
    <!-- Theme Toggle Button -->
-   <div style="text-align: center; padding: 10px;">
+   <div style="text-align: center; padding: 20px;">
        <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
    </div>
 
