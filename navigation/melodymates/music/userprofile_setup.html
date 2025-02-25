@@ -78,8 +78,8 @@ permalink: /melodymates/userprofile_setup.html/
 </head>
 <body>
     <div class="container">
-        <h1>Setup Your Profile</h1>
-        <form id="profileForm" onsubmit="return handleFormSubmission(event)">
+        <h1>Create your Public Profile!</h1>
+        <form id="profileForm" onsubmit="handleFormSubmission(event); return false;">
             <label for="name">Your Name:</label>
             <input type="text" id="name" name="name" required>
 
@@ -93,30 +93,26 @@ permalink: /melodymates/userprofile_setup.html/
             <label for="profilePicture">Profile Picture:</label>
             <input type="text" id="profilePicture" name="profilePicture" placeholder="Profile Picture URL" required>
 
-            <!-- <div class="checkbox-label">
-                <input type="checkbox" id="noPicture" name="no_picture" onchange="toggleProfilePicture()">
-                <label for="noPicture">I don’t want to use a profile picture</label>
-            </div> -->
-
             <button type="submit">Create Profile</button>
         </form>
     </div>
 
-    <script>
-        // import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+    <script type="module">
+        import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
 
-        // Sample fetch request for creating a new public profile
+        console.log(`${pythonURI}`)
+
         const createProfile = async (name, artists, bio, profilePicture) => {
-            const url = `http://127.0.0.1:8887/api/profile`; // Replace with your actual API endpoint
-        
+            const url = `${pythonURI}/api/profile`;
+
             const data = {
-                name: name, // Replace with the desired name
-                uid: name,     // Replace with the desired user ID
-                pfp: profilePicture, // Optional profile picture URL
-                bio: bio,      // Optional bio
-                favorite_artist: artists     // Optional favorite artist
+                name: name,
+                uid: name,
+                pfp: profilePicture,
+                bio: bio,
+                favorite_artist: artists
             };
-        
+
             try {
             const response = await fetch(url, {
                 method: "POST",
@@ -126,41 +122,32 @@ permalink: /melodymates/userprofile_setup.html/
                 },
                 body: JSON.stringify(data)
             });
-        
+
             if (!response.ok) {
-                // Handle errors based on response status
                 const errorData = await response.json();
                 console.error("Error:", errorData.message);
-                // alert(`Error: ${errorData.message}`);
             } else {
-                // Handle success
                 const result = await response.json();
                 console.log("Success:", result);
                 alert("Profile created successfully!");
             }
             } catch (error) {
-            console.error("Fetch error:", error);
-            // alert("An error occurred while creating the profile.");
+                console.error("Fetch error:", error);
             }
-
 
             setTimeout(() => {
                 authenticateUser(name);
             }, 1000);
-  
         };
 
-        // Sample fetch request for user authentication and JWT generation
         const authenticateUser = async (name) => {
-//            const url = `${pythonURI}/api/profileAuthenticate`; // Replace with your actual API endpoint
-            const url = `http://127.0.0.1:8887/api/profileAuthenticate`; // Replace with your actual API endpoint
+            const url = `${pythonURI}/api/profileAuthenticate`;
 
-        
             const data = {
-                uid: name,         // Replace with the user ID
+                uid: name,
                 password: "password"
             };
-        
+
             try {
             const response = await fetch(url, {
                 method: "POST",
@@ -169,34 +156,28 @@ permalink: /melodymates/userprofile_setup.html/
                 "Content-Type": "application/json"
                 },
                 body: JSON.stringify(data),
-                credentials: "include" // Include cookies in the request
+                credentials: "include"
             });
-        
+
             if (!response.ok) {
-                // Handle errors based on response status
                 const errorData = await response.json();
                 console.error("Error:", errorData.message);
-                // alert(`Error: ${errorData.message}`);
             } else {
-                // Handle success
-                const result = await response.text(); // Get the success response as text
+                const result = await response.text();
                 console.log("Success:", result);
                 alert("Authentication successful!");
             }
             } catch (error) {
             console.error("Fetch error:", error);
-            // alert("An error occurred during authentication.");
             }
         };
-        
-        function handleFormSubmission(event) {
-            event.preventDefault(); // Prevent form from reloading the page
+
+        window.handleFormSubmission = function() {
 
             const bio = document.getElementById('bio').value.trim();
             const wordCount = bio.split(/\s+/).filter(word => word).length;
             const errorDiv = document.getElementById('bioError');
 
-            // Validate bio
             if (wordCount < 1 || wordCount > 25) {
                 errorDiv.textContent = "Bio must be between 1 and 25 words.";
                 return false;
@@ -204,13 +185,10 @@ permalink: /melodymates/userprofile_setup.html/
                 errorDiv.textContent = "";
             }
 
-            // Collect form data
             const name = document.getElementById('name').value;
             const artists = document.getElementById('artists').value;
             const profilePicture = document.getElementById('profilePicture').value;
 
-
-            // Save data (use this block if backend is available, else skip)
             console.log({
                 name,
                 bio,
@@ -227,7 +205,6 @@ permalink: /melodymates/userprofile_setup.html/
 
         }
 
-        // Dynamically create and display the button after profile creation
         function showProfileLinkButton() {
             const buttonContainer = document.createElement('div'); // Create a container for the button
             const button = document.createElement('button');

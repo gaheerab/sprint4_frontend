@@ -101,7 +101,9 @@ permalink: /melodymates/created_profile.html/
         <button type="button" onclick="deleteProfile()">Delete Profile</button>
     </form>
 
-    <script>
+    <script type="module">
+        import { login, pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
+
         let uid = '';
 
         function fetchProfile() {
@@ -112,7 +114,7 @@ permalink: /melodymates/created_profile.html/
                 credentials: "include"
             };
 
-            fetch("http://127.0.0.1:8887/api/profileId", requestOptions)
+            fetch(`${pythonURI}/api/profileId`, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
                     document.getElementById('name').textContent = result.name;
@@ -132,7 +134,7 @@ permalink: /melodymates/created_profile.html/
                 });
         }
 
-        function editProfile() {
+        window.editProfile = function() {
             const updatedProfile = {
                 uid: uid, // Include uid in the edit request
                 // name: document.getElementById('editName').value,
@@ -147,7 +149,7 @@ permalink: /melodymates/created_profile.html/
                 redirect: "follow"
             };
 
-            fetch("http://127.0.0.1:8887/api/profile", requestOptions)
+            fetch(`${pythonURI}/api/profile`, requestOptions)
                 .then((response) => response.text())
                 .then((result) => {
                     console.log(result);
@@ -157,7 +159,7 @@ permalink: /melodymates/created_profile.html/
                 .catch((error) => console.error("Error updating profile:", error));
         }
 
-        function deleteProfile() {
+        window.deleteProfile = function() {
             const requestOptions = {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
@@ -165,7 +167,7 @@ permalink: /melodymates/created_profile.html/
                 redirect: "follow"
             };
 
-            fetch("http://127.0.0.1:8887/api/profile", requestOptions)
+            fetch(`${pythonURI}/api/profile`, requestOptions)
                 .then((response) => response.text())
                 .then((result) => {
                     console.log(result);

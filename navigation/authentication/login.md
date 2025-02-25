@@ -101,66 +101,93 @@ show_reading_time: false
     import { login, pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
 
     // Function to handle Python login
+    // Function to handle Python login
     window.pythonLogin = function() {
-        const options = {
-            URL: `${pythonURI}/api/authenticate`,
-            callback: pythonDatabase,
-            message: "message",
+        const uid = document.getElementById("uid").value;
+        const password = document.getElementById("password").value;
+
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const raw = JSON.stringify({
+            "uid": uid,
+            "password": password
+        });
+
+        const requestOptions = {
             method: "POST",
-            cache: "no-cache",
-            body: {
-                uid: document.getElementById("uid").value,
-                password: document.getElementById("password").value,
-            }
+            headers: myHeaders,
+            body: raw,
+            mode: "cors",
+            redirect: "follow"
         };
-        login(options);
+
+        fetch("http://127.0.0.1:8404/api/authenticate", requestOptions)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Login failed: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((result) => {
+                console.log(result);
+                document.getElementById("message").textContent = "Login successful!";
+                // Optionally redirect to profile page
+                window.location.href = '{{site.baseurl}}/profile';
+            })
+            .catch((error) => {
+                console.error("Login Error:", error);
+                document.getElementById("message").textContent = `Login Error: ${error.message}`;
+            });
     }
+
 
     // Function to handle signup
     window.signup = function() {
-    const signupButton = document.querySelector(".signup-card button");
+        const signupButton = document.querySelector(".signup-card button");
 
-    // Disable the button and change its color
-    signupButton.disabled = true;
-    signupButton.style.backgroundColor = '#d3d3d3'; // Light gray to indicate disabled state
+        // Disable the button and change its color
+        signupButton.disabled = true;
+        signupButton.style.backgroundColor = '#d3d3d3'; // Light gray to indicate disabled state
 
-    const signupOptions = {
-        URL: `${pythonURI}/api/user`,
-        method: "POST",
-        cache: "no-cache",
-        body: {
-            name: document.getElementById("name").value,
-            uid: document.getElementById("signupUid").value,
-            password: document.getElementById("signupPassword").value,
-        }
-    };
+        let signupOptions = {
+            URL: `${pythonURI}/api/user`,
+            method: "POST",
+            cache: "no-cache",
+            body: {
+                name: document.getElementById("name").value,
+                uid: document.getElementById("signupUid").value,
+                password: document.getElementById("signupPassword").value,
+            }
+        };
 
-    fetch(signupOptions.URL, {
-        method: signupOptions.method,
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(signupOptions.body)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Signup failed: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        document.getElementById("signupMessage").textContent = "Signup successful!";
-        // Optionally redirect to login page or handle as needed
-        // window.location.href = '{{site.baseurl}}/profile';
-    })
-    .catch(error => {
-        console.error("Signup Error:", error);
-        document.getElementById("signupMessage").textContent = `Signup Error: ${error.message}`;
-        // Re-enable the button if there is an error
-        signupButton.disabled = false;
-        signupButton.style.backgroundColor = ''; // Reset to default color
-    });
-}
+        fetch(signupOptions.URL, {
+            method: signupOptions.method,
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(signupOptions.body)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Signup failed: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById("signupMessage").textContent = "Signup successful!";
+            // Optionally redirect to login page or handle as needed
+            // window.location.href = '{{site.baseurl}}/profile';
+        })
+        .catch(error => {
+            console.error("Signup Error:", error);
+            document.getElementById("signupMessage").textContent = `Signup Error: ${error.message}`;
+            // Re-enable the button if there is an error
+            signupButton.disabled = false;
+            signupButton.style.backgroundColor = ''; // Reset to default color
+        });
+    }
 
 
     // Function to fetch and display Python data

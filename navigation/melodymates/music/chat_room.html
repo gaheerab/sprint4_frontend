@@ -99,7 +99,7 @@ permalink: /melodymates/chat_room.html/
 </div>
 
 <script>
-    const API_BASE_URL = 'http://127.0.0.1:8887/api/music_chat';
+    const API_BASE_URL = '${pythonURI}/api/music_chat';
 
     // Function to fetch all chat messages
     async function fetchMessages() {
@@ -284,9 +284,9 @@ permalink: /melodymates/chat_room.html/
 <script>
     let pythonURI = ""
     if (location.hostname === "localhost") {
-        pythonURI = "http://localhost:8887";
+        pythonURI = "http://localhost:8084";
     } else if (location.hostname === "127.0.0.1") {
-            pythonURI = "http://127.0.0.1:8887";
+            pythonURI = "http://127.0.0.1:8084";
     } else {
             pythonURI =  "https://melodymates.stu.nighthawkcodingsociety.com";
     }
@@ -294,7 +294,7 @@ permalink: /melodymates/chat_room.html/
     // API URL
     const apiUrl = pythonURI + "/api/musichat"; // Update with your actual API URL
 
-    const API_BASE_URL = 'http://127.0.0.1:8887/api/music_chat'; //idk if I need this
+    const API_BASE_URL = 'http://127.0.0.1:8084/api/music_chat'; //idk if I need this
 
     // Function to fetch all chat messages
     async function fetchMessages() {
