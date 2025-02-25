@@ -5,145 +5,151 @@ search_exclude: true
 permalink: /melodymates/profile_building.html/
 ---
 
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Preference Survey</title>
-    <style>
-        body {
-            background-color: white;
-            color: black;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        h1 {
-            text-align: center;
-        }
-        input, select {
-            width: 100%;
-            padding: 8px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            padding: 10px 15px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .survey-table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        .survey-table th, .survey-table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-        .survey-table th {
-            background-color: #f2f2f2;
-            color: black;
-        }
-        .actions button {
-            background-color: #f44336;
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        .actions button:hover {
-            background-color: #e53935;
-        }
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Music Preference Survey</title>
+   <style>
+       body {
+           background-color: white;
+           color: black;
+           font-family: Arial, sans-serif;
+           padding: 20px;
+       }
+       .container {
+           max-width: 600px;
+           margin: 0 auto;
+       }
+       h1 {
+           text-align: center;
+       }
+       input, select {
+           width: 100%;
+           padding: 8px;
+           margin: 10px 0;
+           border: 1px solid #ccc;
+           border-radius: 4px;
+       }
+       button {
+           padding: 10px 15px;
+           background-color: #4CAF50;
+           color: white;
+           border: none;
+           border-radius: 4px;
+           cursor: pointer;
+       }
+       button:hover {
+           background-color: #45a049;
+       }
+       .survey-table {
+           width: 100%;
+           margin-top: 20px;
+           border-collapse: collapse;
+       }
+       .survey-table th, .survey-table td {
+           padding: 10px;
+           border: 1px solid #ddd;
+       }
+       .survey-table th {
+           background-color: #f2f2f2;
+           color: black;
+       }
+       .actions button {
+           background-color: #f44336;
+           border: none;
+           color: white;
+           padding: 5px 10px;
+           cursor: pointer;
+       }
+       .actions button:hover {
+           background-color: #e53935;
+       }
 
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 4px;
-            width: 400px;
-        }
-        .modal button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .modal button:hover {
-            background-color: #45a049;
-        }
-    </style>
+
+       /* Modal Styles */
+       .modal {
+           display: none;
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background-color: rgba(0, 0, 0, 0.5);
+           justify-content: center;
+           align-items: center;
+       }
+       .modal-content {
+           background-color: white;
+           padding: 20px;
+           border-radius: 4px;
+           width: 400px;
+       }
+       .modal button {
+           background-color: #4CAF50;
+           color: white;
+           padding: 10px;
+           border-radius: 4px;
+           cursor: pointer;
+       }
+       .modal button:hover {
+           background-color: #45a049;
+       }
+   </style>
 </head>
 <body>
 
+
 <div class="container">
-    <h1>Music Preference Survey</h1>
+   <h1>Music Preference Survey</h1>
 
-    <!-- Form to input new data -->
-    <form id="musicPrefForm">
-        <input type="text" id="name" placeholder="Name" required>
-        <input type="text" id="uid" placeholder="User ID" required>
-        <input type="text" id="artist_pref" placeholder="Artist Preference" required>
-        <input type="text" id="method" placeholder="Preferred Music Method (e.g., Spotify)" required>
-        <input type="text" id="new_music" placeholder="How do you learn about new music?" required>
-        <input type="text" id="how_often" placeholder="How often do you listen to music?" required>
-        <input type="text" id="era" placeholder="Preferred Music Era" required>
-        <input type="text" id="favorite_aspect" placeholder="Favorite aspect of music" required>
-        <button type="submit">Submit</button>
-    </form>
 
-    <!-- Table to display existing music preferences -->
-    <h2>Existing Music Preferences</h2>
-    <table class="survey-table" id="preferencesTable">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>User ID</th>
-                <th>Artist Preference</th>
-                <th>Method</th>
-                <th>New Music</th>
-                <th>How Often</th>
-                <th>Era</th>
-                <th>Favorite Aspect</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Dynamic data will be injected here -->
-        </tbody>
-    </table>
+   <!-- Form to input new data -->
+   <form id="musicPrefForm">
+       <input type="text" id="name" placeholder="Name" required>
+       <input type="text" id="uid" placeholder="User ID" required>
+       <input type="text" id="artist_pref" placeholder="Artist Preference" required>
+       <input type="text" id="method" placeholder="Preferred Music Method (e.g., Spotify)" required>
+       <input type="text" id="new_music" placeholder="How do you learn about new music?" required>
+       <input type="text" id="how_often" placeholder="How often do you listen to music?" required>
+       <input type="text" id="era" placeholder="Preferred Music Era" required>
+       <input type="text" id="favorite_aspect" placeholder="Favorite aspect of music" required>
+       <button type="submit">Submit</button>
+   </form>
+
+
+   <!-- Table to display existing music preferences -->
+   <h2>Existing Music Preferences</h2>
+   <table class="survey-table" id="preferencesTable">
+       <thead>
+           <tr>
+               <th>Name</th>
+               <th>User ID</th>
+               <th>Artist Preference</th>
+               <th>Method</th>
+               <th>New Music</th>
+               <th>How Often</th>
+               <th>Era</th>
+               <th>Favorite Aspect</th>
+               <th>Actions</th>
+           </tr>
+       </thead>
+       <tbody>
+           <!-- Dynamic data will be injected here -->
+       </tbody>
+   </table>
 </div>
+
 
 <!-- Modal for editing the name -->
 <div class="modal" id="editModal">
-    <div class="modal-content">
-        <h3>Edit Name</h3>
-        <input type="text" id="editName" placeholder="Enter new name" required>
-        <button id="saveNameButton">Save</button>
-        <button id="closeModalButton">Close</button>
-    </div>
+   <div class="modal-content">
+       <h3>Edit Name</h3>
+       <input type="text" id="editName" placeholder="Enter new name" required>
+       <button id="saveNameButton">Save</button>
+       <button id="closeModalButton">Close</button>
+   </div>
 </div>
 <script>
     let pythonURI = ""
@@ -158,155 +164,169 @@ permalink: /melodymates/profile_building.html/
     // API URL
     const apiUrl = pythonURI + "/api/musicpref"; // Update with your actual API URL
 
-    let editingId = null; // This variable will hold the ID of the item being edited
-    let editingUID = null
-
-    // Function to fetch and display music preferences
-    function fetchMusicPrefs() {
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.getElementById('preferencesTable').getElementsByTagName('tbody')[0];
-                tableBody.innerHTML = ""; // Clear existing rows
-                data.forEach(pref => {
-                    const row = tableBody.insertRow();
-                    row.innerHTML = `
-                        <td>${pref.name}</td>
-                        <td>${pref.uid}</td>
-                        <td>${pref.favorites.join(', ')}</td>
-                        <td>${pref.music_platform}</td>
-                        <td>${pref.learn_preference}</td>
-                        <td>${pref.listening_frequency}</td>
-                        <td>${pref.favorite_era}</td>
-                        <td>${pref.important_aspect}</td>
-                        <td class="actions">
-                            <button onclick="editMusicPref('${pref.uid}')">Edit</button>
-                            <button onclick="deleteMusicPref(${pref.id}, this)">Delete</button>
-                        </td>
-                    `;
-                });
-            })
-            .catch(error => console.error("Error fetching data:", error));
-    }
-
-    // Function to handle form submission (POST request)
-    document.getElementById('musicPrefForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        const newPref = {
-            name: document.getElementById('name').value,
-            uid: document.getElementById('uid').value,
-            artist_pref: document.getElementById('artist_pref').value,
-            method: document.getElementById('method').value,
-            new_music: document.getElementById('new_music').value,
-            how_often: document.getElementById('how_often').value,
-            era: document.getElementById('era').value,
-            favorite_aspect: document.getElementById('favorite_aspect').value
-        };
-
-        if (editingId === null) {
-            // Create new preference (POST)
-            fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newPref)
-            })
-            .then(response => response.json())
-            .then(() => {
-                alert('Music preference added!');
-                fetchMusicPrefs(); // Refresh the table
-                document.getElementById('musicPrefForm').reset(); // Reset form
-            })
-            .catch(error => console.error('Error submitting data:', error));
-        } else {
-            // Update existing preference (PUT)
-            fetch(`${apiUrl}/${editingId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newPref)
-            })
-            .then(response => response.json())
-            .then(() => {
-                alert('Music preference updated!');
-                fetchMusicPrefs(); // Refresh the table
-                document.getElementById('musicPrefForm').reset(); // Reset form
-                document.querySelector('button[type="submit"]').textContent = 'Submit'; // Reset button text
-                editingId = null; // Clear editing ID
-            })
-            .catch(error => console.error('Error updating data:', error));
-        }
-    });
+   let editingId = null; // This variable will hold the ID of the item being edited
+   let editingUID = null
 
 
-    // Function to edit an existing music preference (GET request)
-    function editMusicPref(uid) {
-        // editingId = id;
-        editingUID = uid
-        // Show modal
-        const modal = document.getElementById('editModal');
-        modal.style.display = 'flex';
-    }
+   // Function to fetch and display music preferences
+   function fetchMusicPrefs() {
+       fetch(apiUrl)
+           .then(response => response.json())
+           .then(data => {
+               const tableBody = document.getElementById('preferencesTable').getElementsByTagName('tbody')[0];
+               tableBody.innerHTML = ""; // Clear existing rows
+               data.forEach(pref => {
+                   const row = tableBody.insertRow();
+                   row.innerHTML = `
+                       <td>${pref.name}</td>
+                       <td>${pref.uid}</td>
+                       <td>${pref.favorites.join(', ')}</td>
+                       <td>${pref.music_platform}</td>
+                       <td>${pref.learn_preference}</td>
+                       <td>${pref.listening_frequency}</td>
+                       <td>${pref.favorite_era}</td>
+                       <td>${pref.important_aspect}</td>
+                       <td class="actions">
+                           <button onclick="editMusicPref('${pref.uid}')">Edit</button>
+                           <button onclick="deleteMusicPref(${pref.id}, this)">Delete</button>
+                       </td>
+                   `;
+               });
+           })
+           .catch(error => console.error("Error fetching data:", error));
+   }
 
-    // Close the modal
-    document.getElementById('closeModalButton').addEventListener('click', () => {
-        const modal = document.getElementById('editModal');
-        modal.style.display = 'none';
-    });
 
-    // Function to save the edited name
-    document.getElementById('saveNameButton').addEventListener('click', () => {
-        const newName = document.getElementById('editName').value;
-        console.log(editingUID)
-        // Update name in the backend (PUT request)
-        fetch(`${apiUrl}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ uid: editingUID, name: newName })
-        })
-        .then(response => response.json())
-        .then(() => {
-            alert('Name updated!');
-            fetchMusicPrefs(); // Refresh the table
-            document.getElementById('editName').value = ''; // Reset name input
-            const modal = document.getElementById('editModal');
-            modal.style.display = 'none'; // Close modal
-        })
-        .catch(error => console.error('Error updating name:', error));
-    });
+   // Function to handle form submission (POST request)
+   document.getElementById('musicPrefForm').addEventListener('submit', function (event) {
+       event.preventDefault();
 
-    // Function to delete a music preference (DELETE request)
-    function deleteMusicPref(id, buttonElement) {
-        if (confirm('Are you sure you want to delete this entry?')) {
-            fetch(apiUrl, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id: id })  // Send ID in the request body
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Music preference deleted!');
-                    // After the successful DELETE request, remove the row from the frontend
-                    const row = buttonElement.closest('tr');
-                    row.remove(); // Remove the row from the frontend table
-                } else {
-                    alert('Error deleting music preference');
-                }
-            })
-            .catch(error => console.error('Error deleting data:', error));
-        }
-    }
 
-    // Fetch and display data when page loads
-    fetchMusicPrefs();
+       const newPref = {
+           name: document.getElementById('name').value,
+           uid: document.getElementById('uid').value,
+           artist_pref: document.getElementById('artist_pref').value,
+           method: document.getElementById('method').value,
+           new_music: document.getElementById('new_music').value,
+           how_often: document.getElementById('how_often').value,
+           era: document.getElementById('era').value,
+           favorite_aspect: document.getElementById('favorite_aspect').value
+       };
+
+
+       if (editingId === null) {
+           // Create new preference (POST)
+           fetch(apiUrl, {
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/json',
+               },
+               body: JSON.stringify(newPref)
+           })
+           .then(response => response.json())
+           .then(() => {
+               alert('Music preference added!');
+               fetchMusicPrefs(); // Refresh the table
+               document.getElementById('musicPrefForm').reset(); // Reset form
+           })
+           .catch(error => console.error('Error submitting data:', error));
+       } else {
+           // Update existing preference (PUT)
+           fetch(`${apiUrl}/${editingId}`, {
+               method: 'PUT',
+               headers: {
+                   'Content-Type': 'application/json',
+               },
+               body: JSON.stringify(newPref)
+           })
+           .then(response => response.json())
+           .then(() => {
+               alert('Music preference updated!');
+               fetchMusicPrefs(); // Refresh the table
+               document.getElementById('musicPrefForm').reset(); // Reset form
+               document.querySelector('button[type="submit"]').textContent = 'Submit'; // Reset button text
+               editingId = null; // Clear editing ID
+           })
+           .catch(error => console.error('Error updating data:', error));
+       }
+   });
+
+
+
+
+   // Function to edit an existing music preference (GET request)
+   function editMusicPref(uid) {
+       // editingId = id;
+       editingUID = uid
+       // Show modal
+       const modal = document.getElementById('editModal');
+       modal.style.display = 'flex';
+   }
+
+
+   // Close the modal
+   document.getElementById('closeModalButton').addEventListener('click', () => {
+       const modal = document.getElementById('editModal');
+       modal.style.display = 'none';
+   });
+
+
+   // Function to save the edited name
+   document.getElementById('saveNameButton').addEventListener('click', () => {
+       const newName = document.getElementById('editName').value;
+       console.log(editingUID)
+       // Update name in the backend (PUT request)
+       fetch(`${apiUrl}`, {
+           method: 'PUT',
+           headers: {
+               'Content-Type': 'application/json',
+           },
+           body: JSON.stringify({ uid: editingUID, name: newName })
+       })
+       .then(response => response.json())
+       .then(() => {
+           alert('Name updated!');
+           fetchMusicPrefs(); // Refresh the table
+           document.getElementById('editName').value = ''; // Reset name input
+           const modal = document.getElementById('editModal');
+           modal.style.display = 'none'; // Close modal
+       })
+       .catch(error => console.error('Error updating name:', error));
+   });
+
+
+   // Function to delete a music preference (DELETE request)
+   function deleteMusicPref(id, buttonElement) {
+       if (confirm('Are you sure you want to delete this entry?')) {
+           fetch(apiUrl, {
+               method: 'DELETE',
+               headers: {
+                   'Content-Type': 'application/json'
+               },
+               body: JSON.stringify({ id: id })  // Send ID in the request body
+           })
+           .then(response => {
+               if (response.ok) {
+                   alert('Music preference deleted!');
+                   // After the successful DELETE request, remove the row from the frontend
+                   const row = buttonElement.closest('tr');
+                   row.remove(); // Remove the row from the frontend table
+               } else {
+                   alert('Error deleting music preference');
+               }
+           })
+           .catch(error => console.error('Error deleting data:', error));
+       }
+   }
+
+
+   // Fetch and display data when page loads
+   fetchMusicPrefs();
 </script>
+
 
 </body>
 </html>
+
+
+
