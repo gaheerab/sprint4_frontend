@@ -182,7 +182,6 @@ permalink: /melodymates/artist-recommendation.html/
       document.getElementById('updateFavorites').value = '';
     }
   
-    // Load all users into the table
     function loadUsers() {
       fetch(`${pythonURI}/api/artinfo`, {
         ...fetchOptions,  // Spread the fetchOptions here to add headers
@@ -190,9 +189,17 @@ permalink: /melodymates/artist-recommendation.html/
       .then(response => response.json())
       .then(data => {
         const tableBody = document.getElementById('userTable').getElementsByTagName('tbody')[0];
-        tableBody.innerHTML = '';
+        tableBody.innerHTML = ''; // Clear existing rows
+
+        // Loop through each user and display their information
         data.forEach(user => {
           const row = tableBody.insertRow();
+          
+          // Prepare the "Recommended Artists" field. If it's empty, display a placeholder.
+          const recommendedArtists = user.recommended_artists && user.recommended_artists.length > 0
+            ? user.recommended_artists.join(', ')
+            : 'No recommendations available';
+
           row.innerHTML = `
             <td>${user.name}</td>
             <td>${user.uid}</td>
@@ -201,11 +208,17 @@ permalink: /melodymates/artist-recommendation.html/
               <button class="edit-btn" data-uid="${user.uid}">Update</button>
               <button class="delete-btn" data-uid="${user.uid}">Delete</button>
             </td>
+            <td>${recommendedArtists}</td>  <!-- Display recommended artists here -->
           `;
         });
-        attachEventListeners();
+        attachEventListeners();  // Ensure buttons work after table updates
+      })
+      .catch(error => {
+        console.error('Error loading users:', error);
+        alert('There was an error loading user data.');
       });
     }
+
   
     // Attach event listeners to buttons after the table is populated
     function attachEventListeners() {
