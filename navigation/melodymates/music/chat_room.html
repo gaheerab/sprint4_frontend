@@ -99,7 +99,7 @@ permalink: /melodymates/chat_room.html/
 </div>
 
 <script>
-    const API_BASE_URL = '${pythonURI}/api/music_chat';
+    const API_BASE_URL = 'http://127.0.0.1:8887/api/music_chat';
 
     // Function to fetch all chat messages
     async function fetchMessages() {
@@ -282,24 +282,14 @@ permalink: /melodymates/chat_room.html/
 </div>
 
 <script>
-    let pythonURI = ""
-    if (location.hostname === "localhost") {
-        pythonURI = "http://localhost:8084";
-    } else if (location.hostname === "127.0.0.1") {
-            pythonURI = "http://127.0.0.1:8084";
-    } else {
-            pythonURI =  "https://melodymates.stu.nighthawkcodingsociety.com";
-    }
-    console.log(pythonURI)
-    // API URL
-    const apiUrl = pythonURI + "/api/musichat"; // Update with your actual API URL
-
-    const API_BASE_URL = 'http://127.0.0.1:8084/api/music_chat'; //idk if I need this
+    import { pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
+    // Flag to track if we are currently editing
+    let isEditing = false;
 
     // Function to fetch all chat messages
     async function fetchMessages() {
         try {
-            const response = await fetch(`${API_BASE_URL}/chat`);
+            const response = await fetch(`${pythonURI}/chat`);
             const chats = await response.json();
 
             const messageList = document.getElementById('message-list');
@@ -355,7 +345,7 @@ permalink: /melodymates/chat_room.html/
         }
 
         try {
-            const response = await fetch(`${API_BASE_URL}/chat`, {
+            const response = await fetch(`${pythonURI}/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -377,36 +367,51 @@ permalink: /melodymates/chat_room.html/
 
     // Function to enable edit mode for a message
     function enableEdit(messageId, currentMessage) {
+        if (isEditing) return; // Don't allow editing while editing
+    
+        isEditing = true; // Mark as editing
+    
         const messageElement = document.querySelector(`.message[data-id='${messageId}']`);
         const messageTextElement = messageElement.querySelector('.message-text');
-
+    
+        // Create an input field and button to edit the message
         const editInput = document.createElement('input');
         editInput.type = 'text';
         editInput.className = 'edit-input';
         editInput.value = currentMessage;
-
+    
+        // Create the save button
         const saveButton = document.createElement('button');
         saveButton.textContent = 'Save';
-        saveButton.onclick = () => saveEdit(messageId, editInput.value);
+        
+        // When clicked, save the edited message
+        saveButton.onclick = (event) => {
+            event.stopPropagation(); // Prevent the click event from closing the box
+            saveEdit(messageId, editInput.value); // Save the edited message
+            isEditing = false; // Done editing
+        };
+    
+        // Clear the existing message content and replace it with the edit elements
+        messageElement.innerHTML = ''; // Clear the message
 
-        messageElement.innerHTML = ''; // Clear existing content
+        // Rebuild the message with edit options
         messageElement.appendChild(editInput);
         messageElement.appendChild(saveButton);
     }
-
+    
     // Function to save the edited message
     async function saveEdit(messageId, newMessage) {
         try {
-            const response = await fetch(`${API_BASE_URL}/chat/${messageId}`, {
+            const response = await fetch(`${pythonURI}/chat/${messageId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ message: newMessage }),
             });
-
+    
             if (response.ok) {
-                fetchMessages(); // Refresh the chat list
+                fetchMessages(); // Refresh the chat list after saving
             } else {
                 const errorData = await response.json();
                 console.error('Error updating message:', errorData);
@@ -419,7 +424,7 @@ permalink: /melodymates/chat_room.html/
     // Function to delete a message
     async function deleteMessage(messageId) {
         try {
-            const response = await fetch(`${API_BASE_URL}/chat/${messageId}`, {
+            const response = await fetch(`${pythonURI}/chat/${messageId}`, {
                 method: 'DELETE',
             });
 
@@ -434,11 +439,20 @@ permalink: /melodymates/chat_room.html/
         }
     }
 
+    // Auto-refresh function, make sure we don't refresh while editing
+    function stopAutoRefresh() {
+        clearInterval(messageRefreshInterval); // Stop refreshing when editing
+    }
+    
+    function startAutoRefresh() {
+        messageRefreshInterval = setInterval(fetchMessages, 5000); // Restart refreshing when done
+    }
+
     // Fetch messages when the page loads
     fetchMessages();
 
     // Refresh messages every 5 seconds
-    setInterval(fetchMessages, 5000);
+    let messageRefreshInterval = setInterval(fetchMessages, 5000);
 </script>
 
 </body>
