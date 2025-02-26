@@ -135,9 +135,9 @@ permalink: /melodymates/artist-recommendation.html/
 
   <script type="module">
     import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
-  
+    
     let editingUserId = null;
-  
+    console.log("Python URI: ", pythonURI);
     // Handle modal form submission for updating user info
     document.getElementById('editUserForm').addEventListener('submit', function(event) {
       event.preventDefault();
