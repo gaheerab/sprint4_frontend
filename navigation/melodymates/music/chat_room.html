@@ -120,7 +120,7 @@ permalink: /melodymates/chat_room.html/
     // Function to fetch all chat messages
     async function fetchMessages() {
         try {
-            const response = await fetch(`${pythonURI}/chat`);
+            const response = await fetch(`${pythonURI}/api/music_chat/chat`);
             const chats = await response.json();
 
             const messageList = document.getElementById('message-list');
@@ -176,7 +176,7 @@ permalink: /melodymates/chat_room.html/
         }
 
         try {
-            const response = await fetch(`${pythonURI}/chat`, {
+            const response = await fetch(`${pythonURI}/api/music_chat/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -233,7 +233,7 @@ permalink: /melodymates/chat_room.html/
     // Function to save the edited message
     async function saveEdit(messageId, newMessage) {
         try {
-            const response = await fetch(`${pythonURI}/chat/${messageId}`, {
+            const response = await fetch(`${pythonURI}/api/music_chat/chat/${messageId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -255,7 +255,7 @@ permalink: /melodymates/chat_room.html/
     // Function to delete a message
     async function deleteMessage(messageId) {
         try {
-            const response = await fetch(`${pythonURI}/chat/${messageId}`, {
+            const response = await fetch(`${pythonURI}/api/music_chat/chat/${messageId}`, {
                 method: 'DELETE',
             });
 
