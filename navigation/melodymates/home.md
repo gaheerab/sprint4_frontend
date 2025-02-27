@@ -185,7 +185,6 @@ menu: nav/melodymates.html
    <div class="navbar">
        <a href="chat_room.html">Music Chatroom</a>
        <a href="artist-recommendation.html">Artist Recommendations</a>
-       <a href="user-data.html">User Data</a>
        <a href="userprofile_setup.html">User Profile</a>
        <a href="profile_building.html">Build Music Profile</a>
        <a href="profile_matching.html">Matching</a>
