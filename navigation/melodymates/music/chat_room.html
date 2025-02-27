@@ -108,7 +108,7 @@ permalink: /melodymates/chat_room.html/
     <div class="send-message">
         <input type="number" id="user-id-input" placeholder="Your User ID">
         <input type="text" id="message-input" placeholder="Type your message...">
-        <button onclick="sendMessage()">Send</button>
+        <button id="send-button">Send</button>
     </div>
 </div>
 
@@ -162,7 +162,11 @@ permalink: /melodymates/chat_room.html/
             console.error('Error fetching messages:', error);
         }
     }
-
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        // Attach event listener to the button after the DOM is loaded
+        document.getElementById("send-button").addEventListener("click", sendMessage);
+    });
     // Function to send a new chat message
     async function sendMessage() {
         const userIdInput = document.getElementById('user-id-input');
