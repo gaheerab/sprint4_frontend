@@ -11,15 +11,13 @@ permalink: /melodymates/chat_room.html/
     <title>Music Chatroom</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #737fd8;
+            background: linear-gradient(135deg, #ff6b6b, #f06595, #8e44ad); /* Matching Melody Mates theme */
+            color: #fff;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            min-height: 100vh;
-            justify-content: center;
+            transition: all 0.3s ease;
+            overflow-x: hidden;
         }
         .chat-container {
             width: 90%;
@@ -90,13 +88,21 @@ permalink: /melodymates/chat_room.html/
         button:hover {
             background-color: #19a9da;
         }
+        .edit-input {
+            width: calc(100% - 20px);
+            margin-top: 5px;
+            padding: 8px;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
 
 <div class="chat-container">
     <h2>Music Chatroom</h2>
+
     <div class="message-list" id="message-list"></div>
+
     <div class="send-message">
         <input type="number" id="user-id-input" placeholder="Your User ID">
         <input type="text" id="message-input" placeholder="Type your message...">
@@ -105,45 +111,95 @@ permalink: /melodymates/chat_room.html/
 </div>
 
 <script type="module">
-    import { pythonURI } from '{{site.baseurl}}/assets/js/api/config.js';
-
-    // List of banned words
-    const bannedWords = ["fuck", "shit", "bitch", "inappropriate"]; // Replace with actual words
-
-    // Function to filter profanity
-    function censorMessage(message) {
-        let censored = message;
-        let foundProfanity = false;
-
-        bannedWords.forEach(word => {
-            const regex = new RegExp(`\\b${word}\\b`, "gi");
-            if (regex.test(message)) {
-                foundProfanity = true;
-                censored = censored.replace(regex, "******");
+    import { pythonURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
+    // Flag to track if we are currently editing
+    let isEditing = false;
+    
+    // Function to fetch all available user IDs to show to the user
+    async function fetchAvailableUsers() {
+        try {
+            const response = await fetch(`${pythonURI}/api/music_chat/users`);
+            if (response.ok) {
+                const users = await response.json();
+                console.log("Available users:", users);
+                // Log the available user IDs so students can see them
+                const userIds = users.map(user => user.id);
+                console.log("Available user IDs:", userIds);
+                
+                if (userIds.length > 0) {
+                    alert("Available user IDs: " + userIds.join(", ") + "\nUse one of these IDs to send messages.");
+                }
             }
-        });
-
-        if (foundProfanity) {
-            alert("Your message contained inappropriate words and was censored.");
+        } catch (error) {
+            console.error("Error fetching users:", error);
         }
-
-        return censored;
     }
 
+    // Function to fetch all chat messages
+    async function fetchMessages() {
+        try {
+            const response = await fetch(`${pythonURI}/api/music_chat/chat`);
+            const chats = await response.json();
+
+            const messageList = document.getElementById('message-list');
+            messageList.innerHTML = ''; // Clear existing messages
+
+            chats.forEach(chat => {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+                messageElement.setAttribute('data-id', chat.id);
+
+                const userElement = document.createElement('div');
+                userElement.classList.add('message-user');
+                userElement.textContent = `User ${chat.user_id}:`;
+
+                const messageText = document.createElement('div');
+                messageText.classList.add('message-text');
+                messageText.textContent = chat.message;
+
+                const buttonsDiv = document.createElement('div');
+                buttonsDiv.classList.add('message-buttons');
+
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.onclick = () => enableEdit(chat.id, chat.message);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteMessage(chat.id);
+
+                buttonsDiv.appendChild(editButton);
+                buttonsDiv.appendChild(deleteButton);
+
+                messageElement.appendChild(userElement);
+                messageElement.appendChild(messageText);
+                messageElement.appendChild(buttonsDiv);
+                messageList.appendChild(messageElement);
+            });
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    }
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        // Fetch available users when the page loads
+        fetchAvailableUsers();
+        
+        // Attach event listener to the button after the DOM is loaded
+        document.getElementById("send-button").addEventListener("click", sendMessage);
+    });
+    
     // Function to send a new chat message
     async function sendMessage() {
         const userIdInput = document.getElementById('user-id-input');
         const messageInput = document.getElementById('message-input');
         const userId = userIdInput.value.trim();
-        let message = messageInput.value.trim();
+        const message = messageInput.value.trim();
 
         if (!userId || !message) {
             alert('Both User ID and Message are required.');
             return;
         }
-
-        // Censor the message if it contains profanity
-        message = censorMessage(message);
 
         try {
             const response = await fetch(`${pythonURI}/api/music_chat/chat`, {
@@ -161,36 +217,103 @@ permalink: /melodymates/chat_room.html/
                 const errorData = await response.json();
                 console.error('Error sending message:', errorData);
                 alert(`Error: ${errorData.error || 'Unknown error'}. Make sure the User ID exists in the system.`);
+                
+                // Fetch available users again to help the user
+                fetchAvailableUsers();
             }
         } catch (error) {
             console.error('Error sending message:', error);
         }
     }
 
-    // Fetch messages when the page loads
-    async function fetchMessages() {
-        try {
-            const response = await fetch(`${pythonURI}/api/music_chat/chat`);
-            const chats = await response.json();
-            const messageList = document.getElementById('message-list');
-            messageList.innerHTML = '';
+    // Function to enable edit mode for a message
+    function enableEdit(messageId, currentMessage) {
+        if (isEditing) return; // Don't allow editing while editing
+    
+        isEditing = true; // Mark as editing
+    
+        const messageElement = document.querySelector(`.message[data-id='${messageId}']`);
+        const messageTextElement = messageElement.querySelector('.message-text');
+    
+        // Create an input field and button to edit the message
+        const editInput = document.createElement('input');
+        editInput.type = 'text';
+        editInput.className = 'edit-input';
+        editInput.value = currentMessage;
+    
+        // Create the save button
+        const saveButton = document.createElement('button');
+        saveButton.textContent = 'Save';
+        
+        // When clicked, save the edited message
+        saveButton.onclick = (event) => {
+            event.stopPropagation(); // Prevent the click event from closing the box
+            saveEdit(messageId, editInput.value); // Save the edited message
+            isEditing = false; // Done editing
+        };
+    
+        // Clear the existing message content and replace it with the edit elements
+        messageElement.innerHTML = ''; // Clear the message
 
-            chats.forEach(chat => {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message');
-                messageElement.innerHTML = `<div class='message-user'>User ${chat.user_id}:</div><div class='message-text'>${chat.message}</div>`;
-                messageList.appendChild(messageElement);
+        // Rebuild the message with edit options
+        messageElement.appendChild(editInput);
+        messageElement.appendChild(saveButton);
+    }
+    
+    // Function to save the edited message
+    async function saveEdit(messageId, newMessage) {
+        try {
+            const response = await fetch(`${pythonURI}/api/music_chat/chat/${messageId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: newMessage }),
             });
+    
+            if (response.ok) {
+                fetchMessages(); // Refresh the chat list after saving
+            } else {
+                const errorData = await response.json();
+                console.error('Error updating message:', errorData);
+            }
         } catch (error) {
-            console.error('Error fetching messages:', error);
+            console.error('Error updating message:', error);
         }
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("send-button").addEventListener("click", sendMessage);
-        fetchMessages();
-        setInterval(fetchMessages, 5000); // Refresh messages every 5 seconds
-    });
+    // Function to delete a message
+    async function deleteMessage(messageId) {
+        try {
+            const response = await fetch(`${pythonURI}/api/music_chat/chat/${messageId}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                fetchMessages(); // Refresh the chat list
+            } else {
+                const errorData = await response.json();
+                console.error('Error deleting message:', errorData);
+            }
+        } catch (error) {
+            console.error('Error deleting message:', error);
+        }
+    }
+
+    // Auto-refresh function, make sure we don't refresh while editing
+    function stopAutoRefresh() {
+        clearInterval(messageRefreshInterval); // Stop refreshing when editing
+    }
+    
+    function startAutoRefresh() {
+        messageRefreshInterval = setInterval(fetchMessages, 5000); // Restart refreshing when done
+    }
+
+    // Fetch messages when the page loads
+    fetchMessages();
+
+    // Refresh messages every 5 seconds
+    let messageRefreshInterval = setInterval(fetchMessages, 5000);
 </script>
 
 </body>
