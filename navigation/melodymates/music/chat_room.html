@@ -115,6 +115,19 @@ permalink: /melodymates/chat_room.html/
     // Flag to track if we are currently editing
     let isEditing = false;
     
+    // List of inappropriate words to censor
+    const inappropriateWords = ["fuck", "shit", "bitch", "fuck you", "hate", "fucking", "asshole"]; // Replace with actual bad words
+    
+    // Function to censor the message
+    function censorMessage(message) {
+        let censoredMessage = message;
+        inappropriateWords.forEach(word => {
+            const regex = new RegExp(`\\b${word}\\b`, 'gi');
+            censoredMessage = censoredMessage.replace(regex, "****");
+        });
+        return censoredMessage;
+    }
+
     // Function to fetch all available user IDs to show to the user
     async function fetchAvailableUsers() {
         try {
@@ -145,6 +158,7 @@ permalink: /melodymates/chat_room.html/
             messageList.innerHTML = ''; // Clear existing messages
 
             chats.forEach(chat => {
+
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('message');
                 messageElement.setAttribute('data-id', chat.id);
@@ -155,7 +169,7 @@ permalink: /melodymates/chat_room.html/
 
                 const messageText = document.createElement('div');
                 messageText.classList.add('message-text');
-                messageText.textContent = chat.message;
+                messageText.textContent = censorMessage(chat.message); // Censor the message before displaying it
 
                 const buttonsDiv = document.createElement('div');
                 buttonsDiv.classList.add('message-buttons');
@@ -200,6 +214,8 @@ permalink: /melodymates/chat_room.html/
             alert('Both User ID and Message are required.');
             return;
         }
+
+        const censoredMessage = censorMessage(message); // Censor the message before sending it
 
         try {
             const response = await fetch(`${pythonURI}/api/music_chat/chat`, {
@@ -262,6 +278,9 @@ permalink: /melodymates/chat_room.html/
     
     // Function to save the edited message
     async function saveEdit(messageId, newMessage) {
+
+        const censoredMessage = censorMessage(newMessage); // Censor the edited message
+
         try {
             const response = await fetch(`${pythonURI}/api/music_chat/chat/${messageId}`, {
                 method: 'PUT',
