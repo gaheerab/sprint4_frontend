@@ -28,7 +28,7 @@ permalink: /melodymates/profile_building.html/
             width: 100%;
             padding: 8px;
             margin: 10px 0;
-            border: 1px solid #ccc;
+            border: 1px solid #b032a0;
             border-radius: 4px;
         }
         button {
@@ -99,7 +99,29 @@ permalink: /melodymates/profile_building.html/
 <body>
 
 <div class="container">
-    <h1>Music Preference Survey</h1>
+    <h1 class="glow-text">Music Preference Survey</h1>
+
+<style>
+  .glow-text {
+    font-family: 'Comic Sans MS', cursive, sans-serif; /* Bubble-like font */
+    font-size: 3rem;
+    color: #ff99cc; /* Softer pink */
+    text-shadow: 2px 2px 5px #ffb3d9, 0 0 10px #ff80bf;
+    animation: pulse 2s infinite alternate ease-in-out;
+  }
+
+  @keyframes pulse {
+    0% {
+      text-shadow: 2px 2px 5px #ffb3d9, 0 0 10px #ff80bf;
+      transform: scale(1);
+    }
+    100% {
+      text-shadow: 3px 3px 7px #ffcce6, 0 0 12px #ff99cc;
+      transform: scale(1.05);
+    }
+  }
+</style>
+
 
     <!-- Form to input new data -->
     <form id="musicPrefForm">
