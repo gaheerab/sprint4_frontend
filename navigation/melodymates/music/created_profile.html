@@ -20,7 +20,7 @@ permalink: /melodymates/created_profile.html/
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 100vh;
         }
 
@@ -121,6 +121,8 @@ permalink: /melodymates/created_profile.html/
                     document.getElementById('bio').textContent = result.bio;
                     document.getElementById('favoriteArtists').textContent = result.favorite_artist;
                     
+                    document.getElementById('editBio').value = result.bio;
+                    document.getElementById('editArtists').value = result.favorite_artist;
 
                     const profileImage = document.getElementById('profileImage');
                     profileImage.src = result.pfp; 
@@ -137,7 +139,6 @@ permalink: /melodymates/created_profile.html/
         window.editProfile = function() {
             const updatedProfile = {
                 uid: uid, // Include uid in the edit request
-                // name: document.getElementById('editName').value,
                 bio: document.getElementById('editBio').value,
                 favorite_artist: document.getElementById('editArtists').value
             };
